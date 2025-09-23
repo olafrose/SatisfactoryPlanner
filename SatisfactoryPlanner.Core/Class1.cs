@@ -1,6 +1,3 @@
 ﻿namespace SatisfactoryPlanner.Core;
 
-public class Class1
-{
-
-}
+// This file will be removed - splitting into separate model files

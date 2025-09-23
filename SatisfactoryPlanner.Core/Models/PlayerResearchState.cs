@@ -63,6 +63,8 @@ public class PlayerResearchState
 
     /// <summary>
     /// Checks if a recipe is unlocked by completed milestones
+    /// Note: This sync version uses hardcoded milestone-recipe mappings.
+    /// Use IsRecipeUnlockedByMilestonesAsync for accurate milestone checking.
     /// </summary>
     public bool IsRecipeUnlockedByMilestones(string recipeId)
     {
@@ -70,14 +72,27 @@ public class PlayerResearchState
         if (!CompletedMilestones.Any())
             return true;
 
-        // Recipe is available if unlocked by any completed milestone
-        // For basic recipes that are always available in tier 0
-        var basicRecipes = new HashSet<string> 
-        { 
-            "iron_ingot", "copper_ingot", "iron_plate", "iron_rod", "screw", "wire", "cable", "concrete"
+        // Hardcoded milestone-recipe mappings (should match GameData.json)
+        var milestoneRecipes = new Dictionary<string, HashSet<string>>
+        {
+            ["onboarding"] = new HashSet<string> { "iron_ingot", "iron_plate", "iron_rod" },
+            ["hub_upgrade_2"] = new HashSet<string> { "copper_ingot", "wire", "cable" },
+            ["hub_upgrade_3"] = new HashSet<string> { "concrete", "screw", "reinforced_iron_plate" },
+            ["hub_upgrade_6"] = new HashSet<string> { "biomass" },
+            ["part_assembly"] = new HashSet<string> { "copper_sheet", "rotor", "modular_frame", "smart_plating" },
+            ["obstacle_clearing"] = new HashSet<string> { "solid_biofuel" },
+            ["basic_steel_production"] = new HashSet<string> { "steel_ingot", "steel_beam", "steel_pipe", "versatile_framework" },
+            ["advanced_steel_production"] = new HashSet<string> { "encased_industrial_beam", "stator", "motor", "automated_wiring" }
         };
 
-        return basicRecipes.Contains(recipeId) || CompletedMilestones.Any();
+        // Check if any completed milestone unlocks this recipe
+        foreach (var milestone in CompletedMilestones)
+        {
+            if (milestoneRecipes.TryGetValue(milestone, out var recipes) && recipes.Contains(recipeId))
+                return true;
+        }
+
+        return false;
     }
 
     /// <summary>

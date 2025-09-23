@@ -19,9 +19,9 @@ try
     Console.WriteLine("Planning production for 10 Reinforced Iron Plates per minute...");
     Console.WriteLine();
 
-    // Plan 1: Standard recipes only
+    // Plan 1: Standard recipes only - Player with basic HUB upgrades that unlock reinforced iron plate
     Console.WriteLine("=== STANDARD RECIPES ONLY ===");
-    var standardState = PlayerResearchState.ForTier(0);
+    var standardState = PlayerResearchState.WithMilestones(0, "onboarding", "hub_upgrade_1", "hub_upgrade_2", "hub_upgrade_3");
     var standardGraph = await planner.PlanProductionAsync(targetItems, standardState);
     
     Console.WriteLine($"Production Graph: {standardGraph.Name}");
@@ -37,9 +37,14 @@ try
     }
     Console.WriteLine();
 
-    // Plan 2: With efficient alternate recipes
+    // Plan 2: With efficient alternate recipes - Player with advanced milestones
     Console.WriteLine("=== WITH EFFICIENT ALTERNATE RECIPES ===");
-    var efficientState = PlayerResearchState.EfficiencyFocused(0);
+    var efficientState = PlayerResearchState.WithMilestones(0, "onboarding", "hub_upgrade_1", "hub_upgrade_2", "hub_upgrade_3");
+    // Manually add some alternate recipes for demonstration
+    efficientState.UnlockAlternateRecipe("iron_plate_alternate_cast");
+    efficientState.UnlockAlternateRecipe("screw_alternate_cast");
+    efficientState.UnlockAlternateRecipe("wire_alternate_fused");
+    efficientState.UnlockAlternateRecipe("reinforced_iron_plate_alternate_adhered");
     Console.WriteLine($"Unlocked alternates: {string.Join(", ", efficientState.UnlockedAlternateRecipes)}");
     var efficientGraph = await planner.PlanProductionAsync(targetItems, efficientState);
     
@@ -72,19 +77,20 @@ try
     Console.WriteLine();
     Console.WriteLine("=== MILESTONE-BASED PROGRESSION ===");
     
-    // Player with only basic milestones
-    var basicPlayer = PlayerResearchState.WithMilestones(2, "tier0_equipment", "tier0_production");
+    // Player with only basic milestones (completed HUB upgrades)
+    var basicPlayer = PlayerResearchState.WithMilestones(0, "onboarding", "hub_upgrade_1", "hub_upgrade_2", "hub_upgrade_3");
     Console.WriteLine($"Basic Player - Completed Milestones: {string.Join(", ", basicPlayer.CompletedMilestones)}");
     
-    // Player with advanced milestones
+    // Player with advanced milestones (completed through Tier 2)
     var advancedPlayer = PlayerResearchState.WithMilestones(2, 
-        "tier0_equipment", "tier0_production", "tier1_logistics", "tier2_part_assembly");
+        "onboarding", "hub_upgrade_1", "hub_upgrade_2", "hub_upgrade_3", "hub_upgrade_4", "hub_upgrade_5", "hub_upgrade_6",
+        "logistics_mk1", "part_assembly", "logistics_mk2", "space_elevator_phase_1");
     Console.WriteLine($"Advanced Player - Completed Milestones: {string.Join(", ", advancedPlayer.CompletedMilestones)}");
     
     // Compare available content
     Console.WriteLine();
     Console.WriteLine("Recipe availability comparison:");
-    var testRecipes = new[] { "iron_plate", "reinforced_iron_plate", "concrete" };
+    var testRecipes = new[] { "iron_plate", "reinforced_iron_plate", "concrete", "rotor", "modular_frame" };
     
     foreach (var recipeId in testRecipes)
     {

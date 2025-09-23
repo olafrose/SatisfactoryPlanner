@@ -41,34 +41,34 @@ public class MilestoneDemo
         Console.WriteLine();
         Console.WriteLine("Milestone Progression Scenarios:");
         
-        // Scenario 1: New player (Tier 0, basic milestones only)
+        // Scenario 1: New player (just onboarding and first HUB upgrade)
         var newPlayer = new PlayerResearchState
         {
             CurrentTier = 0,
-            CompletedMilestones = new HashSet<string> { "tier0_equipment" }
+            CompletedMilestones = new HashSet<string> { "onboarding", "hub_upgrade_1" }
         };
         
-        Console.WriteLine("1. New Player (completed: tier0_equipment):");
+        Console.WriteLine("1. New Player (completed: onboarding, hub_upgrade_1):");
         await ShowRecipeAvailability(newPlayer, milestoneRepo, new[] { "iron_plate", "screw", "reinforced_iron_plate" });
         
-        // Scenario 2: Early game player (Tier 0, all basic milestones)
+        // Scenario 2: Early game player (completed basic HUB upgrades)
         var earlyPlayer = new PlayerResearchState
         {
             CurrentTier = 0,
-            CompletedMilestones = new HashSet<string> { "tier0_equipment", "tier0_production" }
+            CompletedMilestones = new HashSet<string> { "onboarding", "hub_upgrade_1", "hub_upgrade_2", "hub_upgrade_3" }
         };
         
-        Console.WriteLine("2. Early Player (completed: tier0_equipment, tier0_production):");
+        Console.WriteLine("2. Early Player (completed: onboarding through hub_upgrade_3):");
         await ShowRecipeAvailability(earlyPlayer, milestoneRepo, new[] { "iron_plate", "screw", "reinforced_iron_plate" });
         
-        // Scenario 3: Mid-tier player (Tier 2, several milestones)
+        // Scenario 3: Mid-tier player (Tier 2, with assembler and part assembly)
         var midPlayer = new PlayerResearchState
         {
             CurrentTier = 2,
             CompletedMilestones = new HashSet<string> 
             { 
-                "tier0_equipment", "tier0_production", 
-                "tier1_logistics", "tier2_part_assembly" 
+                "onboarding", "hub_upgrade_1", "hub_upgrade_2", "hub_upgrade_3", "hub_upgrade_4", "hub_upgrade_5", "hub_upgrade_6",
+                "logistics_mk1", "part_assembly" 
             }
         };
         

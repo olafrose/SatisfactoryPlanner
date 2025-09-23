@@ -12,7 +12,7 @@ public class MilestoneDemo
         Console.WriteLine("=== MILESTONE-BASED PROGRESSION DEMO ===");
         
         // Setup repositories
-        var dataPath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "SatisfactoryPlanner.Core", "Data", "GameData.json");
+        var dataPath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "SatisfactoryPlanner.Core", "Data", "GameData", "GameData.json");
         var itemLoader = new ItemLoader(dataPath);
         var milestoneRepo = new InMemoryMilestoneRepository(dataPath, itemLoader);
         

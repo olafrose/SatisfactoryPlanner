@@ -55,22 +55,22 @@ public class SatisfactoryPlannerService
         var assemblyDir = Path.GetDirectoryName(typeof(SatisfactoryPlannerService).Assembly.Location);
         if (assemblyDir != null)
         {
-            var dataPath = Path.Combine(assemblyDir, "Data", "GameData.json");
+            var dataPath = Path.Combine(assemblyDir, "Data", "GameData", "GameData.json");
             if (File.Exists(dataPath))
                 return dataPath;
         }
 
         // Try relative to current directory (development scenario)
-        var currentDirPath = Path.Combine("Data", "GameData.json");
+        var currentDirPath = Path.Combine("Data", "GameData", "GameData.json");
         if (File.Exists(currentDirPath))
             return currentDirPath;
 
         // Try in the Core project directory (for testing)
-        var coreProjectPath = Path.Combine("..", "..", "..", "SatisfactoryPlanner.Core", "Data", "GameData.json");
+        var coreProjectPath = Path.Combine("..", "..", "..", "SatisfactoryPlanner.Core", "Data", "GameData", "GameData.json");
         if (File.Exists(coreProjectPath))
             return Path.GetFullPath(coreProjectPath);
 
-        throw new FileNotFoundException("Could not find GameData.json file. Please ensure it exists in the Data directory.");
+        throw new FileNotFoundException("Could not find GameData.json file. Please ensure it exists in the Data/GameData directory.");
     }
 
     /// <summary>

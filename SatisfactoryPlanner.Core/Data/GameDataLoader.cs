@@ -53,7 +53,7 @@ public class GameDataLoader
     /// <summary>
     /// Converts DTOs to domain models with proper relationships
     /// </summary>
-    public async Task<(List<Item> items, List<Recipe> recipes)> LoadModelsAsync()
+    public async Task<(List<Item> items, List<Recipe> recipes, List<Milestone> milestones, List<Machine> machines)> LoadModelsAsync()
     {
         var gameData = await LoadGameDataAsync();
         
@@ -64,7 +64,13 @@ public class GameDataLoader
         // Convert recipes with item references
         var recipes = gameData.Recipes.Select(dto => ConvertToRecipe(dto, itemLookup)).ToList();
 
-        return (items, recipes);
+        // Convert milestones
+        var milestones = gameData.Milestones.Select(dto => ConvertToMilestone(dto, itemLookup)).ToList();
+
+        // Convert machines
+        var machines = gameData.Machines.Select(ConvertToMachine).ToList();
+
+        return (items, recipes, milestones, machines);
     }
 
     private static Item ConvertToItem(ItemDto dto)
@@ -120,6 +126,53 @@ public class GameDataLoader
         }
 
         return recipe;
+    }
+
+    private static Milestone ConvertToMilestone(MilestoneDto dto, Dictionary<string, Item> itemLookup)
+    {
+        var milestone = new Milestone
+        {
+            Id = dto.Id,
+            Name = dto.Name,
+            Description = dto.Description,
+            Tier = dto.Tier,
+            UnlockedRecipeIds = new HashSet<string>(dto.UnlockedRecipeIds),
+            UnlockedMachineIds = new HashSet<string>(dto.UnlockedMachineIds),
+            IsRequired = dto.IsRequired,
+            PrerequisiteMilestoneIds = new HashSet<string>(dto.PrerequisiteMilestoneIds)
+        };
+
+        // Convert cost items
+        foreach (var costDto in dto.Cost)
+        {
+            if (itemLookup.TryGetValue(costDto.ItemId, out var item))
+            {
+                milestone.Cost.Add(new ItemQuantity(item, costDto.Quantity));
+            }
+            else
+            {
+                throw new InvalidOperationException($"Milestone '{dto.Id}' references unknown cost item '{costDto.ItemId}'");
+            }
+        }
+
+        return milestone;
+    }
+
+    private static Machine ConvertToMachine(MachineDto dto)
+    {
+        return new Machine
+        {
+            Id = dto.Id,
+            Name = dto.Name,
+            Description = dto.Description,
+            Type = Enum.TryParse<MachineType>(dto.Type, out var type) ? type : MachineType.Constructor,
+            ProductionSpeed = dto.ProductionSpeed,
+            PowerConsumption = dto.PowerConsumption,
+            UnlockTier = dto.UnlockTier,
+            MaxInputConnections = dto.MaxInputConnections,
+            MaxOutputConnections = dto.MaxOutputConnections,
+            CanOverclock = dto.CanOverclock
+        };
     }
 
     /// <summary>

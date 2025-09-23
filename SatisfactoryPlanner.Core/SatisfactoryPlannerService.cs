@@ -19,8 +19,8 @@ public class SatisfactoryPlannerService
         // Initialize with file-based repositories
         var dataFilePath = GetDefaultDataFilePath();
         _recipeRepository = new FileBasedRecipeRepository(dataFilePath);
-        _machineRepository = new InMemoryMachineRepository();
-        _itemRepository = new FileBasedItemRepository(dataFilePath);
+        _machineRepository = new InMemoryMachineRepository(dataFilePath);
+        _itemRepository = new InMemoryItemRepository(dataFilePath);
         _graphBuilder = new ProductionGraphBuilder(_recipeRepository, _machineRepository);
     }
 
@@ -28,8 +28,8 @@ public class SatisfactoryPlannerService
     {
         // Initialize with custom data file
         _recipeRepository = new FileBasedRecipeRepository(dataFilePath);
-        _machineRepository = new InMemoryMachineRepository();
-        _itemRepository = new FileBasedItemRepository(dataFilePath);
+        _machineRepository = new InMemoryMachineRepository(dataFilePath);
+        _itemRepository = new InMemoryItemRepository(dataFilePath);
         _graphBuilder = new ProductionGraphBuilder(_recipeRepository, _machineRepository);
     }
 
@@ -97,6 +97,34 @@ public class SatisfactoryPlannerService
         }
 
         return await _graphBuilder.BuildProductionGraphAsync(targetOutputs, gameTier, options);
+    }
+
+    /// <summary>
+    /// Plans a production line for the specified items and quantities with player research state
+    /// </summary>
+    /// <param name="targetItems">Items to produce with their desired rates per minute</param>
+    /// <param name="playerState">Player's research state and preferences</param>
+    /// <param name="options">Build options for optimization</param>
+    /// <returns>Complete production graph</returns>
+    public async Task<ProductionGraph> PlanProductionAsync(
+        Dictionary<string, double> targetItems,
+        PlayerResearchState playerState,
+        ProductionGraphOptions? options = null)
+    {
+        var targetOutputs = new List<ItemQuantity>();
+        
+        foreach (var (itemId, quantity) in targetItems)
+        {
+            var item = await _itemRepository.GetItemByIdAsync(itemId);
+            if (item == null)
+            {
+                throw new ArgumentException($"Item with ID '{itemId}' not found");
+            }
+            
+            targetOutputs.Add(new ItemQuantity(item, quantity) { QuantityPerMinute = quantity });
+        }
+
+        return await _graphBuilder.BuildProductionGraphAsync(targetOutputs, playerState, options);
     }
 
     /// <summary>

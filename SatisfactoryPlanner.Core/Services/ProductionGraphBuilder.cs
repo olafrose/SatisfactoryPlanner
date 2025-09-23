@@ -54,6 +54,48 @@ public class ProductionGraphBuilder
     }
 
     /// <summary>
+    /// Builds a production graph to produce the specified target items with player research state
+    /// </summary>
+    /// <param name="targetOutputs">Items and quantities to produce per minute</param>
+    /// <param name="playerState">Player's research state and preferences</param>
+    /// <param name="options">Build options for optimization preferences</param>
+    /// <returns>Complete production graph</returns>
+    public async Task<ProductionGraph> BuildProductionGraphAsync(
+        List<ItemQuantity> targetOutputs, 
+        PlayerResearchState playerState, 
+        ProductionGraphOptions? options = null)
+    {
+        options ??= new ProductionGraphOptions();
+        
+        // Configure options based on player preferences
+        options.OptimizeFor = playerState.PreferredOptimization;
+        options.AllowOverclocking = playerState.AllowOverclocking;
+        options.MaxOverclockPercentage = playerState.MaxOverclockPercentage;
+        
+        var graph = new ProductionGraph
+        {
+            Name = $"Production for {string.Join(", ", targetOutputs.Select(t => t.Item.Name))}",
+            TargetOutputs = targetOutputs,
+            GameTier = playerState.CurrentTier
+        };
+
+        // Build the graph recursively for each target output
+        foreach (var target in targetOutputs)
+        {
+            var leafNode = await BuildProductionChainAsync(target, playerState, options, graph);
+            if (leafNode != null)
+            {
+                graph.Nodes.Add(leafNode);
+            }
+        }
+
+        // Optimize the graph
+        OptimizeGraph(graph, options);
+
+        return graph;
+    }
+
+    /// <summary>
     /// Recursively builds the production chain for a specific item
     /// </summary>
     private async Task<ProductionNode?> BuildProductionChainAsync(
@@ -129,13 +171,120 @@ public class ProductionGraphBuilder
     }
 
     /// <summary>
-    /// Selects the best recipe based on the optimization options
+    /// Recursively builds the production chain for a specific item with player research state
+    /// </summary>
+    private async Task<ProductionNode?> BuildProductionChainAsync(
+        ItemQuantity targetOutput,
+        PlayerResearchState playerState,
+        ProductionGraphOptions options,
+        ProductionGraph graph)
+    {
+        // If it's a raw resource, no production node needed
+        if (targetOutput.Item.IsRawResource)
+        {
+            return null;
+        }
+
+        // Find the best recipe for this item
+        var availableRecipes = await _recipeRepository.GetRecipesForOutputAsync(targetOutput.Item.Id);
+        var validRecipes = availableRecipes.Where(r => playerState.IsRecipeAvailable(r)).ToList();
+        
+        if (!validRecipes.Any())
+        {
+            throw new InvalidOperationException($"No recipes available for {targetOutput.Item.Name} at tier {playerState.CurrentTier}");
+        }
+
+        var selectedRecipe = SelectBestRecipe(validRecipes, options);
+        
+        // Find the best machine for this recipe
+        var availableMachines = await _machineRepository.GetMachinesForRecipeAsync(selectedRecipe.Id);
+        var validMachines = availableMachines.Where(m => m.UnlockTier <= playerState.CurrentTier).ToList();
+        
+        if (!validMachines.Any())
+        {
+            throw new InvalidOperationException($"No machines available for recipe {selectedRecipe.Name} at tier {playerState.CurrentTier}");
+        }
+
+        var selectedMachine = SelectBestMachine(validMachines, options);
+
+        // Create the production node
+        var node = new ProductionNode
+        {
+            Recipe = selectedRecipe,
+            Machine = selectedMachine,
+            TargetProductionRate = targetOutput.QuantityPerMinute
+        };
+
+        // Calculate required machine count
+        var primaryOutput = selectedRecipe.Outputs.First(o => o.Item.Id == targetOutput.Item.Id);
+        var baseProductionRate = (primaryOutput.Quantity * 60.0) / selectedRecipe.ProductionTimeSeconds;
+        var adjustedRate = baseProductionRate * selectedMachine.ProductionSpeed;
+        
+        node.MachineCount = Math.Ceiling(targetOutput.QuantityPerMinute / adjustedRate);
+
+        // Build input chains recursively
+        foreach (var input in selectedRecipe.Inputs)
+        {
+            var requiredInputRate = (input.Quantity * 60.0 / selectedRecipe.ProductionTimeSeconds) * node.MachineCount;
+            var inputTarget = new ItemQuantity(input.Item, requiredInputRate) { QuantityPerMinute = requiredInputRate };
+            
+            var inputNode = await BuildProductionChainAsync(inputTarget, playerState, options, graph);
+            if (inputNode != null)
+            {
+                node.InputNodes.Add(inputNode);
+                inputNode.OutputNodes.Add(node);
+                
+                // Add to graph if not already present
+                if (!graph.Nodes.Contains(inputNode))
+                {
+                    graph.Nodes.Add(inputNode);
+                }
+            }
+        }
+
+        return node;
+    }
+
+    /// <summary>
+    /// Selects the best recipe based on the optimization options and available recipes
     /// </summary>
     private Recipe SelectBestRecipe(List<Recipe> recipes, ProductionGraphOptions options)
     {
-        return options.PreferAlternateRecipes 
-            ? recipes.OrderByDescending(r => r.IsAlternate).ThenBy(r => r.Inputs.Count).First()
-            : recipes.OrderBy(r => r.IsAlternate).ThenBy(r => r.Inputs.Count).First();
+        if (options.PreferAlternateRecipes)
+        {
+            // Prefer alternate recipes first
+            return recipes.OrderByDescending(r => r.IsAlternate).ThenBy(r => r.Inputs.Count).First();
+        }
+
+        // For efficiency optimization, prefer recipes with better resource efficiency
+        if (options.OptimizeFor == OptimizationTarget.ResourceEfficiency)
+        {
+            return recipes
+                .OrderByDescending(r => r.IsAlternate) // Prefer alternates for efficiency
+                .ThenBy(r => CalculateResourceEfficiency(r))
+                .First();
+        }
+
+        // For speed optimization, prefer recipes with higher output rates
+        if (options.OptimizeFor == OptimizationTarget.Speed)
+        {
+            return recipes
+                .OrderByDescending(r => r.Outputs.Sum(o => o.Quantity) / r.ProductionTimeSeconds)
+                .First();
+        }
+
+        // Default: prefer standard recipes, then by simplicity
+        return recipes.OrderBy(r => r.IsAlternate).ThenBy(r => r.Inputs.Count).First();
+    }
+
+    /// <summary>
+    /// Calculates resource efficiency score (higher is better)
+    /// </summary>
+    private double CalculateResourceEfficiency(Recipe recipe)
+    {
+        var totalInputs = recipe.Inputs.Sum(i => i.Quantity);
+        var totalOutputs = recipe.Outputs.Sum(o => o.Quantity);
+        return totalOutputs / Math.Max(totalInputs, 1.0);
     }
 
     /// <summary>

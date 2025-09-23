@@ -37,3 +37,16 @@ public interface IItemRepository
     Task<List<Item>> GetItemsByCategoryAsync(ItemCategory category);
     Task<List<Item>> GetRawResourcesAsync();
 }
+
+/// <summary>
+/// Repository interface for managing milestones
+/// </summary>
+public interface IMilestoneRepository
+{
+    Task<List<Milestone>> GetAllMilestonesAsync();
+    Task<Milestone?> GetMilestoneByIdAsync(string id);
+    Task<List<Milestone>> GetMilestonesByTierAsync(int tier);
+    Task<List<string>> GetRecipeIdsUnlockedByMilestoneAsync(string milestoneId);
+    Task<List<string>> GetMachineIdsUnlockedByMilestoneAsync(string milestoneId);
+    Task<bool> AreMilestonePrerequisitesMetAsync(string milestoneId, IEnumerable<string> completedMilestones);
+}

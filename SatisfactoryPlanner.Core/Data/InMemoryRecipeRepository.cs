@@ -61,7 +61,7 @@ public class FileBasedRecipeRepository : IRecipeRepository
     {
         if (_recipes == null)
         {
-            var (_, recipes) = await _dataLoader.LoadModelsAsync();
+            var (_, recipes, _, _) = await _dataLoader.LoadModelsAsync();
             _recipes = recipes;
         }
     }

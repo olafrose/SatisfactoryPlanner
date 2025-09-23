@@ -70,6 +70,8 @@ public class InMemoryMachineRepository : IMachineRepository
     public async Task<List<Machine>> GetMachinesByTierAsync(int maxTier)
     {
         await EnsureDataLoadedAsync();
-        return _machines!.Where(m => m.UnlockTier <= maxTier).ToList();
+        // Since machines are now unlocked by milestones, return all machines
+        // Milestone filtering should happen at a higher level
+        return _machines!.ToList();
     }
 }

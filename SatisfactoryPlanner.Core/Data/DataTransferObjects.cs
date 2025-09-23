@@ -30,7 +30,6 @@ public class RecipeDto
     public List<ItemQuantityDto> Outputs { get; set; } = new();
     public double ProductionTimeSeconds { get; set; }
     public List<string> CompatibleMachineIds { get; set; } = new();
-    public int UnlockTier { get; set; }
     public bool IsAlternate { get; set; }
 }
 
@@ -61,7 +60,6 @@ public class MachineDto
     public string Type { get; set; } = string.Empty;
     public double ProductionSpeed { get; set; }
     public double PowerConsumption { get; set; }
-    public int UnlockTier { get; set; }
     public int MaxInputConnections { get; set; }
     public int MaxOutputConnections { get; set; }
     public bool CanOverclock { get; set; } = true;

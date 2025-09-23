@@ -30,11 +30,6 @@ public class Recipe
     public List<string> CompatibleMachineIds { get; set; } = new();
     
     /// <summary>
-    /// Game tier/stage when this recipe becomes available
-    /// </summary>
-    public int UnlockTier { get; set; }
-    
-    /// <summary>
     /// Whether this is an alternate recipe
     /// </summary>
     public bool IsAlternate { get; set; }

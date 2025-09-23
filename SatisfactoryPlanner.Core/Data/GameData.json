@@ -167,7 +167,6 @@
       ],
       "productionTimeSeconds": 2.0,
       "compatibleMachineIds": ["smelter"],
-      "unlockTier": 0,
       "isAlternate": false
     },
     {
@@ -188,7 +187,6 @@
       ],
       "productionTimeSeconds": 6.0,
       "compatibleMachineIds": ["constructor"],
-      "unlockTier": 0,
       "isAlternate": false
     },
     {
@@ -209,7 +207,6 @@
       ],
       "productionTimeSeconds": 4.0,
       "compatibleMachineIds": ["constructor"],
-      "unlockTier": 0,
       "isAlternate": false
     },
     {
@@ -234,7 +231,6 @@
       ],
       "productionTimeSeconds": 12.0,
       "compatibleMachineIds": ["assembler"],
-      "unlockTier": 0,
       "isAlternate": false
     },
     {
@@ -255,7 +251,6 @@
       ],
       "productionTimeSeconds": 6.0,
       "compatibleMachineIds": ["constructor"],
-      "unlockTier": 0,
       "isAlternate": false
     },
     {
@@ -276,7 +271,6 @@
       ],
       "productionTimeSeconds": 2.0,
       "compatibleMachineIds": ["smelter"],
-      "unlockTier": 0,
       "isAlternate": false
     },
     {
@@ -297,7 +291,6 @@
       ],
       "productionTimeSeconds": 4.0,
       "compatibleMachineIds": ["constructor"],
-      "unlockTier": 0,
       "isAlternate": false
     },
     {
@@ -318,7 +311,6 @@
       ],
       "productionTimeSeconds": 2.0,
       "compatibleMachineIds": ["constructor"],
-      "unlockTier": 0,
       "isAlternate": false
     },
     {
@@ -339,7 +331,6 @@
       ],
       "productionTimeSeconds": 4.0,
       "compatibleMachineIds": ["constructor"],
-      "unlockTier": 0,
       "isAlternate": false
     },
     {
@@ -364,7 +355,6 @@
       ],
       "productionTimeSeconds": 15.0,
       "compatibleMachineIds": ["assembler"],
-      "unlockTier": 1,
       "isAlternate": false
     },
     {
@@ -389,7 +379,6 @@
       ],
       "productionTimeSeconds": 60.0,
       "compatibleMachineIds": ["assembler"],
-      "unlockTier": 1,
       "isAlternate": false
     },
     {
@@ -414,7 +403,6 @@
       ],
       "productionTimeSeconds": 30.0,
       "compatibleMachineIds": ["assembler"],
-      "unlockTier": 1,
       "isAlternate": false
     },
     {
@@ -435,7 +423,6 @@
       ],
       "productionTimeSeconds": 8.0,
       "compatibleMachineIds": ["constructor"],
-      "unlockTier": 0,
       "isAlternate": true
     },
     {
@@ -456,7 +443,6 @@
       ],
       "productionTimeSeconds": 24.0,
       "compatibleMachineIds": ["constructor"],
-      "unlockTier": 0,
       "isAlternate": true
     },
     {
@@ -481,7 +467,6 @@
       ],
       "productionTimeSeconds": 16.0,
       "compatibleMachineIds": ["assembler"],
-      "unlockTier": 0,
       "isAlternate": true
     },
     {
@@ -502,108 +487,225 @@
       ],
       "productionTimeSeconds": 20.0,
       "compatibleMachineIds": ["constructor"],
-      "unlockTier": 0,
       "isAlternate": true
     }
   ],
   "milestones": [
     {
-      "id": "tier0_equipment",
-      "name": "Equipment Workshop",
-      "description": "Unlocks basic equipment and building tools",
+      "id": "hub_upgrade_1",
+      "name": "HUB Upgrade 1",
+      "description": "The Equipment Workshop",
       "tier": 0,
       "unlockedRecipeIds": ["iron_plate", "iron_rod"],
       "unlockedMachineIds": ["constructor"],
       "isRequired": true,
       "prerequisiteMilestoneIds": [],
+      "cost": []
+    },
+    {
+      "id": "hub_upgrade_2",
+      "name": "HUB Upgrade 2",
+      "description": "Craft Bench",
+      "tier": 0,
+      "unlockedRecipeIds": ["screw"],
+      "unlockedMachineIds": [],
+      "isRequired": true,
+      "prerequisiteMilestoneIds": ["hub_upgrade_1"],
+      "cost": []
+    },
+    {
+      "id": "hub_upgrade_3",
+      "name": "HUB Upgrade 3",
+      "description": "Smelter unlocks",
+      "tier": 0,
+      "unlockedRecipeIds": [],
+      "unlockedMachineIds": ["smelter"],
+      "isRequired": true,
+      "prerequisiteMilestoneIds": ["hub_upgrade_2"],
+      "cost": []
+    },
+    {
+      "id": "hub_upgrade_4",
+      "name": "HUB Upgrade 4",
+      "description": "Constructor unlocks",
+      "tier": 0,
+      "unlockedRecipeIds": ["cable", "wire", "concrete"],
+      "unlockedMachineIds": [],
+      "isRequired": true,
+      "prerequisiteMilestoneIds": ["hub_upgrade_3"],
+      "cost": []
+    },
+    {
+      "id": "hub_upgrade_5",
+      "name": "HUB Upgrade 5",
+      "description": "Logistics unlocks",
+      "tier": 0,
+      "unlockedRecipeIds": [],
+      "unlockedMachineIds": [],
+      "isRequired": true,
+      "prerequisiteMilestoneIds": ["hub_upgrade_4"],
+      "cost": []
+    },
+    {
+      "id": "hub_upgrade_6",
+      "name": "HUB Upgrade 6", 
+      "description": "Final HUB upgrade",
+      "tier": 0,
+      "unlockedRecipeIds": [],
+      "unlockedMachineIds": [],
+      "isRequired": true,
+      "prerequisiteMilestoneIds": ["hub_upgrade_5"],
+      "cost": []
+    },
+    {
+      "id": "base_building",
+      "name": "Base Building",
+      "description": "Essential parts for automation",
+      "tier": 1,
+      "unlockedRecipeIds": ["reinforced_iron_plate"],
+      "unlockedMachineIds": [],
+      "isRequired": true,
+      "prerequisiteMilestoneIds": ["hub_upgrade_6"],
       "cost": [
         {
           "itemId": "iron_plate",
+          "quantity": 300
+        },
+        {
+          "itemId": "iron_rod",
+          "quantity": 100
+        }
+      ]
+    },
+    {
+      "id": "logistics_mk1",
+      "name": "Logistics Mk.1",
+      "description": "Improved logistics and belts",
+      "tier": 1,
+      "unlockedRecipeIds": [],
+      "unlockedMachineIds": [],
+      "isRequired": true,
+      "prerequisiteMilestoneIds": ["base_building"],
+      "cost": [
+        {
+          "itemId": "reinforced_iron_plate",
           "quantity": 10
         }
       ]
     },
     {
-      "id": "tier0_production",
-      "name": "Base Building", 
-      "description": "Unlocks basic production buildings",
-      "tier": 0,
-      "unlockedRecipeIds": ["screw", "cable", "wire"],
-      "unlockedMachineIds": ["smelter"],
-      "isRequired": true,
-      "prerequisiteMilestoneIds": [],
-      "cost": [
-        {
-          "itemId": "iron_rod",
-          "quantity": 5
-        }
-      ]
-    },
-    {
-      "id": "tier1_logistics",
-      "name": "Logistics",
-      "description": "Unlocks basic logistics and storage", 
-      "tier": 1,
-      "unlockedRecipeIds": ["concrete"],
-      "unlockedMachineIds": [],
-      "isRequired": true,
-      "prerequisiteMilestoneIds": ["tier0_equipment"],
-      "cost": [
-        {
-          "itemId": "iron_plate",
-          "quantity": 15
-        },
-        {
-          "itemId": "iron_rod", 
-          "quantity": 15
-        }
-      ]
-    },
-    {
-      "id": "tier1_field_research",
+      "id": "field_research",
       "name": "Field Research",
-      "description": "Unlocks advanced crafting and research",
+      "description": "Portable Miner and research tools",
       "tier": 1,
       "unlockedRecipeIds": [],
       "unlockedMachineIds": [],
       "isRequired": false,
-      "prerequisiteMilestoneIds": ["tier0_production"],
+      "prerequisiteMilestoneIds": ["base_building"],
       "cost": [
         {
           "itemId": "screw",
+          "quantity": 300
+        },
+        {
+          "itemId": "iron_plate",
+          "quantity": 100
+        }
+      ]
+    },
+    {
+      "id": "part_assembly",
+      "name": "Part Assembly",
+      "description": "Unlock the Assembler",
+      "tier": 2,
+      "unlockedRecipeIds": ["rotor"],
+      "unlockedMachineIds": ["assembler"],
+      "isRequired": true,
+      "prerequisiteMilestoneIds": ["logistics_mk1"],
+      "cost": [
+        {
+          "itemId": "reinforced_iron_plate",
           "quantity": 50
         }
       ]
     },
     {
-      "id": "tier2_part_assembly",
-      "name": "Part Assembly",
-      "description": "Unlocks assembler and advanced parts",
-      "tier": 2,
-      "unlockedRecipeIds": ["reinforced_iron_plate", "rotor"],
-      "unlockedMachineIds": ["assembler"],
-      "isRequired": true,
-      "prerequisiteMilestoneIds": ["tier1_logistics"],
-      "cost": [
-        {
-          "itemId": "reinforced_iron_plate",
-          "quantity": 3
-        }
-      ]
-    },
-    {
-      "id": "tier2_obstacle_clearing",
-      "name": "Obstacle Clearing",
-      "description": "Unlocks tools for clearing obstacles",
+      "id": "obstacle_clearing",
+      "name": "Obstacle Clearing", 
+      "description": "Tools for clearing obstacles",
       "tier": 2,
       "unlockedRecipeIds": [],
       "unlockedMachineIds": [],
       "isRequired": false,
-      "prerequisiteMilestoneIds": ["tier1_field_research"],
+      "prerequisiteMilestoneIds": ["field_research", "part_assembly"],
       "cost": [
         {
           "itemId": "rotor",
-          "quantity": 3
+          "quantity": 25
+        },
+        {
+          "itemId": "reinforced_iron_plate",
+          "quantity": 25
+        }
+      ]
+    },
+    {
+      "id": "jump_pads",
+      "name": "Jump Pads",
+      "description": "Pneumatic movement assistance",
+      "tier": 2,
+      "unlockedRecipeIds": [],
+      "unlockedMachineIds": [],
+      "isRequired": false,
+      "prerequisiteMilestoneIds": ["part_assembly"],
+      "cost": [
+        {
+          "itemId": "rotor",
+          "quantity": 10
+        },
+        {
+          "itemId": "cable",
+          "quantity": 100
+        }
+      ]
+    },
+    {
+      "id": "resource_sink_bonus",
+      "name": "Resource Sink Bonus Program",
+      "description": "AWESOME Sink for resource processing",
+      "tier": 2,
+      "unlockedRecipeIds": [],
+      "unlockedMachineIds": [],
+      "isRequired": false,
+      "prerequisiteMilestoneIds": ["part_assembly"],
+      "cost": [
+        {
+          "itemId": "rotor",
+          "quantity": 50
+        },
+        {
+          "itemId": "wire",
+          "quantity": 500
+        }
+      ]
+    },
+    {
+      "id": "logistics_mk2",
+      "name": "Logistics Mk.2",
+      "description": "Enhanced logistics systems",
+      "tier": 2,
+      "unlockedRecipeIds": [],
+      "unlockedMachineIds": [],
+      "isRequired": true,
+      "prerequisiteMilestoneIds": ["part_assembly"],
+      "cost": [
+        {
+          "itemId": "reinforced_iron_plate",
+          "quantity": 100
+        },
+        {
+          "itemId": "rotor",
+          "quantity": 25
         }
       ]
     }
@@ -616,7 +718,6 @@
       "type": "Smelter",
       "productionSpeed": 1.0,
       "powerConsumption": 4.0,
-      "unlockTier": 0,
       "maxInputConnections": 1,
       "maxOutputConnections": 1,
       "canOverclock": true
@@ -628,7 +729,6 @@
       "type": "Smelter",
       "productionSpeed": 1.0,
       "powerConsumption": 16.0,
-      "unlockTier": 1,
       "maxInputConnections": 2,
       "maxOutputConnections": 1,
       "canOverclock": true
@@ -640,7 +740,6 @@
       "type": "Constructor",
       "productionSpeed": 1.0,
       "powerConsumption": 4.0,
-      "unlockTier": 0,
       "maxInputConnections": 1,
       "maxOutputConnections": 1,
       "canOverclock": true
@@ -652,7 +751,6 @@
       "type": "Assembler",
       "productionSpeed": 1.0,
       "powerConsumption": 15.0,
-      "unlockTier": 0,
       "maxInputConnections": 2,
       "maxOutputConnections": 1,
       "canOverclock": true
@@ -664,7 +762,6 @@
       "type": "Manufacturer",
       "productionSpeed": 1.0,
       "powerConsumption": 55.0,
-      "unlockTier": 2,
       "maxInputConnections": 4,
       "maxOutputConnections": 1,
       "canOverclock": true
@@ -676,7 +773,6 @@
       "type": "Refinery",
       "productionSpeed": 1.0,
       "powerConsumption": 30.0,
-      "unlockTier": 3,
       "maxInputConnections": 3,
       "maxOutputConnections": 2,
       "canOverclock": true
@@ -688,7 +784,6 @@
       "type": "Extractor",
       "productionSpeed": 1.0,
       "powerConsumption": 5.0,
-      "unlockTier": 0,
       "maxInputConnections": 0,
       "maxOutputConnections": 1,
       "canOverclock": true
@@ -700,7 +795,6 @@
       "type": "Extractor",
       "productionSpeed": 2.0,
       "powerConsumption": 12.0,
-      "unlockTier": 2,
       "maxInputConnections": 0,
       "maxOutputConnections": 1,
       "canOverclock": true
@@ -712,7 +806,6 @@
       "type": "Extractor",
       "productionSpeed": 4.0,
       "powerConsumption": 30.0,
-      "unlockTier": 4,
       "maxInputConnections": 0,
       "maxOutputConnections": 1,
       "canOverclock": true

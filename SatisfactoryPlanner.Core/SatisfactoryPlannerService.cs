@@ -16,9 +16,9 @@ public class SatisfactoryPlannerService
 
     public SatisfactoryPlannerService()
     {
-        // Initialize with file-based repositories
+        // Initialize with consistent repositories
         var dataFilePath = GetDefaultDataFilePath();
-        _recipeRepository = new FileBasedRecipeRepository(dataFilePath);
+        _recipeRepository = new InMemoryRecipeRepository(dataFilePath);
         _machineRepository = new InMemoryMachineRepository(dataFilePath);
         _itemRepository = new InMemoryItemRepository(dataFilePath);
         _graphBuilder = new ProductionGraphBuilder(_recipeRepository, _machineRepository);
@@ -27,7 +27,7 @@ public class SatisfactoryPlannerService
     public SatisfactoryPlannerService(string dataFilePath)
     {
         // Initialize with custom data file
-        _recipeRepository = new FileBasedRecipeRepository(dataFilePath);
+        _recipeRepository = new InMemoryRecipeRepository(dataFilePath);
         _machineRepository = new InMemoryMachineRepository(dataFilePath);
         _itemRepository = new InMemoryItemRepository(dataFilePath);
         _graphBuilder = new ProductionGraphBuilder(_recipeRepository, _machineRepository);

@@ -112,7 +112,8 @@ public class ProductionGraphBuilder
 
         // Find the best recipe for this item
         var availableRecipes = await _recipeRepository.GetRecipesForOutputAsync(targetOutput.Item.Id);
-        var validRecipes = availableRecipes.Where(r => r.UnlockTier <= gameTier).ToList();
+        // Note: Recipe filtering by milestones should be handled at a higher level
+        var validRecipes = availableRecipes.ToList();
         
         if (!validRecipes.Any())
         {
@@ -123,7 +124,8 @@ public class ProductionGraphBuilder
         
         // Find the best machine for this recipe
         var availableMachines = await _machineRepository.GetMachinesForRecipeAsync(selectedRecipe.Id);
-        var validMachines = availableMachines.Where(m => m.UnlockTier <= gameTier).ToList();
+        // Note: Machine filtering by milestones should be handled at a higher level
+        var validMachines = availableMachines.ToList();
         
         if (!validMachines.Any())
         {
@@ -198,7 +200,8 @@ public class ProductionGraphBuilder
         
         // Find the best machine for this recipe
         var availableMachines = await _machineRepository.GetMachinesForRecipeAsync(selectedRecipe.Id);
-        var validMachines = availableMachines.Where(m => m.UnlockTier <= playerState.CurrentTier).ToList();
+        // Note: Machine filtering by milestones should be handled at a higher level
+        var validMachines = availableMachines.ToList();
         
         if (!validMachines.Any())
         {
@@ -296,7 +299,7 @@ public class ProductionGraphBuilder
         {
             OptimizationTarget.PowerEfficiency => machines.OrderBy(m => m.PowerConsumption / m.ProductionSpeed).First(),
             OptimizationTarget.Speed => machines.OrderByDescending(m => m.ProductionSpeed).First(),
-            OptimizationTarget.Simplicity => machines.OrderBy(m => m.UnlockTier).ThenBy(m => m.PowerConsumption).First(),
+            OptimizationTarget.Simplicity => machines.OrderBy(m => m.PowerConsumption).First(),
             _ => machines.First()
         };
     }

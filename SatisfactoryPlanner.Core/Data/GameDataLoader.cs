@@ -95,7 +95,6 @@ public class GameDataLoader
             Description = dto.Description,
             ProductionTimeSeconds = dto.ProductionTimeSeconds,
             CompatibleMachineIds = dto.CompatibleMachineIds,
-            UnlockTier = dto.UnlockTier,
             IsAlternate = dto.IsAlternate
         };
 
@@ -168,7 +167,6 @@ public class GameDataLoader
             Type = Enum.TryParse<MachineType>(dto.Type, out var type) ? type : MachineType.Constructor,
             ProductionSpeed = dto.ProductionSpeed,
             PowerConsumption = dto.PowerConsumption,
-            UnlockTier = dto.UnlockTier,
             MaxInputConnections = dto.MaxInputConnections,
             MaxOutputConnections = dto.MaxOutputConnections,
             CanOverclock = dto.CanOverclock

@@ -21,11 +21,6 @@ public class Machine
     public double PowerConsumption { get; set; }
     
     /// <summary>
-    /// Game tier when this machine becomes available
-    /// </summary>
-    public int UnlockTier { get; set; }
-    
-    /// <summary>
     /// Maximum number of input conveyor/pipe connections
     /// </summary>
     public int MaxInputConnections { get; set; } = 1;

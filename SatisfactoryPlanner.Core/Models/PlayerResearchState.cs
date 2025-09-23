@@ -49,10 +49,6 @@ public class PlayerResearchState
     /// </summary>
     public bool IsRecipeAvailable(Recipe recipe)
     {
-        // Check tier requirement
-        if (recipe.UnlockTier > CurrentTier)
-            return false;
-
         // For alternate recipes, check if unlocked
         if (recipe.IsAlternate)
             return UnlockedAlternateRecipes.Contains(recipe.Id);
@@ -89,10 +85,6 @@ public class PlayerResearchState
     /// </summary>
     public bool IsMachineAvailable(Machine machine)
     {
-        // Check tier requirement
-        if (machine.UnlockTier > CurrentTier)
-            return false;
-
         // Check if the machine is unlocked by any completed milestone
         return IsMachineUnlockedByMilestones(machine.Id);
     }
@@ -102,10 +94,6 @@ public class PlayerResearchState
     /// </summary>
     public async Task<bool> IsRecipeAvailableAsync(Recipe recipe, IMilestoneRepository milestoneRepository)
     {
-        // Check tier requirement
-        if (recipe.UnlockTier > CurrentTier)
-            return false;
-
         // For alternate recipes, check if unlocked
         if (recipe.IsAlternate)
             return UnlockedAlternateRecipes.Contains(recipe.Id);
@@ -123,10 +111,6 @@ public class PlayerResearchState
     /// </summary>
     public async Task<bool> IsMachineAvailableAsync(Machine machine, IMilestoneRepository milestoneRepository)
     {
-        // Check tier requirement
-        if (machine.UnlockTier > CurrentTier)
-            return false;
-
         // Check if the machine is unlocked by any completed milestone
         return await IsMachineUnlockedByMilestonesAsync(machine.Id, milestoneRepository);
     }

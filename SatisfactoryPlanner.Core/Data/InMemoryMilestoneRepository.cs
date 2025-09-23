@@ -8,25 +8,24 @@ namespace SatisfactoryPlanner.Core.Data;
 /// </summary>
 public class InMemoryMilestoneRepository : IMilestoneRepository
 {
-    private readonly GameDataLoader _dataLoader;
+    private readonly MilestoneLoader _milestoneLoader;
     private List<Milestone>? _milestones;
 
-    public InMemoryMilestoneRepository(GameDataLoader dataLoader)
+    public InMemoryMilestoneRepository(MilestoneLoader milestoneLoader)
     {
-        _dataLoader = dataLoader;
+        _milestoneLoader = milestoneLoader;
     }
 
-    public InMemoryMilestoneRepository(string dataFilePath)
+    public InMemoryMilestoneRepository(string dataFilePath, ItemLoader itemLoader)
     {
-        _dataLoader = new GameDataLoader(dataFilePath);
+        _milestoneLoader = new MilestoneLoader(dataFilePath, itemLoader);
     }
 
     private async Task EnsureDataLoadedAsync()
     {
         if (_milestones == null)
         {
-            var (_, _, milestones, _) = await _dataLoader.LoadModelsAsync();
-            _milestones = milestones;
+            _milestones = await _milestoneLoader.LoadMilestonesAsync();
         }
     }
 

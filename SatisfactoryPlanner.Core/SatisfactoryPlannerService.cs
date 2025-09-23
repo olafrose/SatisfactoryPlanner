@@ -18,7 +18,8 @@ public class SatisfactoryPlannerService
     {
         // Initialize with consistent repositories
         var dataFilePath = GetDefaultDataFilePath();
-        _recipeRepository = new InMemoryRecipeRepository(dataFilePath);
+        var itemLoader = new ItemLoader(dataFilePath);
+        _recipeRepository = new InMemoryRecipeRepository(dataFilePath, itemLoader);
         _machineRepository = new InMemoryMachineRepository(dataFilePath);
         _itemRepository = new InMemoryItemRepository(dataFilePath);
         _graphBuilder = new ProductionGraphBuilder(_recipeRepository, _machineRepository);
@@ -27,7 +28,8 @@ public class SatisfactoryPlannerService
     public SatisfactoryPlannerService(string dataFilePath)
     {
         // Initialize with custom data file
-        _recipeRepository = new InMemoryRecipeRepository(dataFilePath);
+        var itemLoader = new ItemLoader(dataFilePath);
+        _recipeRepository = new InMemoryRecipeRepository(dataFilePath, itemLoader);
         _machineRepository = new InMemoryMachineRepository(dataFilePath);
         _itemRepository = new InMemoryItemRepository(dataFilePath);
         _graphBuilder = new ProductionGraphBuilder(_recipeRepository, _machineRepository);

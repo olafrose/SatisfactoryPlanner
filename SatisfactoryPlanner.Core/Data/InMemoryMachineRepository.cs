@@ -8,25 +8,24 @@ namespace SatisfactoryPlanner.Core.Data;
 /// </summary>
 public class InMemoryMachineRepository : IMachineRepository
 {
-    private readonly GameDataLoader _dataLoader;
+    private readonly MachineLoader _machineLoader;
     private List<Machine>? _machines;
 
-    public InMemoryMachineRepository(GameDataLoader dataLoader)
+    public InMemoryMachineRepository(MachineLoader machineLoader)
     {
-        _dataLoader = dataLoader;
+        _machineLoader = machineLoader;
     }
 
     public InMemoryMachineRepository(string dataFilePath)
     {
-        _dataLoader = new GameDataLoader(dataFilePath);
+        _machineLoader = new MachineLoader(dataFilePath);
     }
 
     private async Task EnsureDataLoadedAsync()
     {
         if (_machines == null)
         {
-            var (_, _, _, machines) = await _dataLoader.LoadModelsAsync();
-            _machines = machines;
+            _machines = await _machineLoader.LoadMachinesAsync();
         }
     }
 

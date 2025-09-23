@@ -8,25 +8,24 @@ namespace SatisfactoryPlanner.Core.Data;
 /// </summary>
 public class InMemoryRecipeRepository : IRecipeRepository
 {
-    private readonly GameDataLoader _dataLoader;
+    private readonly RecipeLoader _recipeLoader;
     private List<Recipe>? _recipes;
 
-    public InMemoryRecipeRepository(GameDataLoader dataLoader)
+    public InMemoryRecipeRepository(RecipeLoader recipeLoader)
     {
-        _dataLoader = dataLoader;
+        _recipeLoader = recipeLoader;
     }
 
-    public InMemoryRecipeRepository(string dataFilePath)
+    public InMemoryRecipeRepository(string dataFilePath, ItemLoader itemLoader)
     {
-        _dataLoader = new GameDataLoader(dataFilePath);
+        _recipeLoader = new RecipeLoader(dataFilePath, itemLoader);
     }
 
     private async Task EnsureDataLoadedAsync()
     {
         if (_recipes == null)
         {
-            var (_, recipes, _, _) = await _dataLoader.LoadModelsAsync();
-            _recipes = recipes;
+            _recipes = await _recipeLoader.LoadRecipesAsync();
         }
     }
 

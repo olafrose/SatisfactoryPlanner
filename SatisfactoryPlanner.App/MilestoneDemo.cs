@@ -13,8 +13,8 @@ public class MilestoneDemo
         
         // Setup repositories
         var dataPath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "SatisfactoryPlanner.Core", "Data", "GameData.json");
-        var dataLoader = new GameDataLoader(dataPath);
-        var milestoneRepo = new InMemoryMilestoneRepository(dataLoader);
+        var itemLoader = new ItemLoader(dataPath);
+        var milestoneRepo = new InMemoryMilestoneRepository(dataPath, itemLoader);
         
         // Load all milestones
         var allMilestones = await milestoneRepo.GetAllMilestonesAsync();

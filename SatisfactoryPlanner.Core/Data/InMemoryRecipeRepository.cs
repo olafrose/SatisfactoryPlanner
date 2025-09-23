@@ -4,7 +4,71 @@ using SatisfactoryPlanner.Core.Services;
 namespace SatisfactoryPlanner.Core.Data;
 
 /// <summary>
-/// In-memory implementation of recipe repository with Satisfactory game data
+/// File-based implementation of recipe repository that loads from JSON
+/// </summary>
+public class FileBasedRecipeRepository : IRecipeRepository
+{
+    private readonly GameDataLoader _dataLoader;
+    private List<Recipe>? _recipes;
+
+    public FileBasedRecipeRepository(GameDataLoader dataLoader)
+    {
+        _dataLoader = dataLoader;
+    }
+
+    public FileBasedRecipeRepository(string dataFilePath)
+    {
+        _dataLoader = new GameDataLoader(dataFilePath);
+    }
+
+    public async Task<List<Recipe>> GetAllRecipesAsync()
+    {
+        await EnsureDataLoadedAsync();
+        return _recipes!;
+    }
+
+    public async Task<Recipe?> GetRecipeByIdAsync(string id)
+    {
+        await EnsureDataLoadedAsync();
+        return _recipes!.FirstOrDefault(r => r.Id == id);
+    }
+
+    public async Task<List<Recipe>> GetRecipesForOutputAsync(string itemId)
+    {
+        await EnsureDataLoadedAsync();
+        return _recipes!.Where(r => r.Outputs.Any(o => o.Item.Id == itemId)).ToList();
+    }
+
+    public async Task<List<Recipe>> GetRecipesForInputAsync(string itemId)
+    {
+        await EnsureDataLoadedAsync();
+        return _recipes!.Where(r => r.Inputs.Any(i => i.Item.Id == itemId)).ToList();
+    }
+
+    public async Task<List<Recipe>> GetRecipesByTierAsync(int maxTier)
+    {
+        await EnsureDataLoadedAsync();
+        return _recipes!.Where(r => r.UnlockTier <= maxTier).ToList();
+    }
+
+    public async Task<List<Recipe>> GetAlternateRecipesAsync()
+    {
+        await EnsureDataLoadedAsync();
+        return _recipes!.Where(r => r.IsAlternate).ToList();
+    }
+
+    private async Task EnsureDataLoadedAsync()
+    {
+        if (_recipes == null)
+        {
+            var (_, recipes) = await _dataLoader.LoadModelsAsync();
+            _recipes = recipes;
+        }
+    }
+}
+
+/// <summary>
+/// Legacy in-memory implementation of recipe repository with hardcoded Satisfactory game data
 /// </summary>
 public class InMemoryRecipeRepository : IRecipeRepository
 {

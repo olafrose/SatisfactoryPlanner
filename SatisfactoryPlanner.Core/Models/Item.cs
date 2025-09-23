@@ -32,5 +32,6 @@ public enum ItemCategory
     SpaceElevator,   // Space Elevator parts
     MAM,             // MAM research parts
     Equipment,       // Tools and equipment
-    Building         // Building components
+    Building,        // Building components
+    Other            // Miscellaneous items
 }

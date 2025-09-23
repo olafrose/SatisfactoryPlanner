@@ -4,7 +4,59 @@ using SatisfactoryPlanner.Core.Services;
 namespace SatisfactoryPlanner.Core.Data;
 
 /// <summary>
-/// In-memory implementation of item repository with Satisfactory game data
+/// File-based implementation of item repository that loads from JSON
+/// </summary>
+public class FileBasedItemRepository : IItemRepository
+{
+    private readonly GameDataLoader _dataLoader;
+    private List<Item>? _items;
+
+    public FileBasedItemRepository(GameDataLoader dataLoader)
+    {
+        _dataLoader = dataLoader;
+    }
+
+    public FileBasedItemRepository(string dataFilePath)
+    {
+        _dataLoader = new GameDataLoader(dataFilePath);
+    }
+
+    public async Task<List<Item>> GetAllItemsAsync()
+    {
+        await EnsureDataLoadedAsync();
+        return _items!;
+    }
+
+    public async Task<Item?> GetItemByIdAsync(string id)
+    {
+        await EnsureDataLoadedAsync();
+        return _items!.FirstOrDefault(i => i.Id == id);
+    }
+
+    public async Task<List<Item>> GetItemsByCategoryAsync(ItemCategory category)
+    {
+        await EnsureDataLoadedAsync();
+        return _items!.Where(i => i.Category == category).ToList();
+    }
+
+    public async Task<List<Item>> GetRawResourcesAsync()
+    {
+        await EnsureDataLoadedAsync();
+        return _items!.Where(i => i.IsRawResource).ToList();
+    }
+
+    private async Task EnsureDataLoadedAsync()
+    {
+        if (_items == null)
+        {
+            var (items, _) = await _dataLoader.LoadModelsAsync();
+            _items = items;
+        }
+    }
+}
+
+/// <summary>
+/// Legacy in-memory implementation of item repository with hardcoded Satisfactory game data
 /// </summary>
 public class InMemoryItemRepository : IItemRepository
 {

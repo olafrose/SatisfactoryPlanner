@@ -16,10 +16,20 @@ public class SatisfactoryPlannerService
 
     public SatisfactoryPlannerService()
     {
-        // Initialize with in-memory repositories
-        _recipeRepository = new InMemoryRecipeRepository();
+        // Initialize with file-based repositories
+        var dataFilePath = GetDefaultDataFilePath();
+        _recipeRepository = new FileBasedRecipeRepository(dataFilePath);
         _machineRepository = new InMemoryMachineRepository();
-        _itemRepository = new InMemoryItemRepository();
+        _itemRepository = new FileBasedItemRepository(dataFilePath);
+        _graphBuilder = new ProductionGraphBuilder(_recipeRepository, _machineRepository);
+    }
+
+    public SatisfactoryPlannerService(string dataFilePath)
+    {
+        // Initialize with custom data file
+        _recipeRepository = new FileBasedRecipeRepository(dataFilePath);
+        _machineRepository = new InMemoryMachineRepository();
+        _itemRepository = new FileBasedItemRepository(dataFilePath);
         _graphBuilder = new ProductionGraphBuilder(_recipeRepository, _machineRepository);
     }
 
@@ -32,6 +42,33 @@ public class SatisfactoryPlannerService
         _machineRepository = machineRepository;
         _itemRepository = itemRepository;
         _graphBuilder = new ProductionGraphBuilder(_recipeRepository, _machineRepository);
+    }
+
+    /// <summary>
+    /// Gets the default path to the game data file
+    /// </summary>
+    private static string GetDefaultDataFilePath()
+    {
+        // Try to find the data file relative to the assembly location
+        var assemblyDir = Path.GetDirectoryName(typeof(SatisfactoryPlannerService).Assembly.Location);
+        if (assemblyDir != null)
+        {
+            var dataPath = Path.Combine(assemblyDir, "Data", "GameData.json");
+            if (File.Exists(dataPath))
+                return dataPath;
+        }
+
+        // Try relative to current directory (development scenario)
+        var currentDirPath = Path.Combine("Data", "GameData.json");
+        if (File.Exists(currentDirPath))
+            return currentDirPath;
+
+        // Try in the Core project directory (for testing)
+        var coreProjectPath = Path.Combine("..", "..", "..", "SatisfactoryPlanner.Core", "Data", "GameData.json");
+        if (File.Exists(coreProjectPath))
+            return Path.GetFullPath(coreProjectPath);
+
+        throw new FileNotFoundException("Could not find GameData.json file. Please ensure it exists in the Data directory.");
     }
 
     /// <summary>

@@ -1,0 +1,421 @@
+{
+  "items": [
+    {
+      "id": "iron_ore",
+      "name": "Iron Ore",
+      "description": "Used for smelting into Iron Ingots",
+      "category": "RawResource",
+      "isRawResource": true
+    },
+    {
+      "id": "copper_ore",
+      "name": "Copper Ore",
+      "description": "Used for smelting into Copper Ingots",
+      "category": "RawResource",
+      "isRawResource": true
+    },
+    {
+      "id": "limestone",
+      "name": "Limestone",
+      "description": "Used for creating Concrete",
+      "category": "RawResource",
+      "isRawResource": true
+    },
+    {
+      "id": "coal",
+      "name": "Coal",
+      "description": "Used for power generation and steel production",
+      "category": "RawResource",
+      "isRawResource": true
+    },
+    {
+      "id": "iron_ingot",
+      "name": "Iron Ingot",
+      "description": "Refined iron for crafting",
+      "category": "Ingot",
+      "isRawResource": false
+    },
+    {
+      "id": "copper_ingot",
+      "name": "Copper Ingot",
+      "description": "Refined copper for crafting",
+      "category": "Ingot",
+      "isRawResource": false
+    },
+    {
+      "id": "iron_plate",
+      "name": "Iron Plate",
+      "description": "Basic iron construction component",
+      "category": "BasicPart",
+      "isRawResource": false
+    },
+    {
+      "id": "iron_rod",
+      "name": "Iron Rod",
+      "description": "Basic iron construction component",
+      "category": "BasicPart",
+      "isRawResource": false
+    },
+    {
+      "id": "screw",
+      "name": "Screw",
+      "description": "Basic fastening component",
+      "category": "BasicPart",
+      "isRawResource": false
+    },
+    {
+      "id": "wire",
+      "name": "Wire",
+      "description": "Basic electrical component",
+      "category": "BasicPart",
+      "isRawResource": false
+    },
+    {
+      "id": "cable",
+      "name": "Cable",
+      "description": "Electrical transmission component",
+      "category": "BasicPart",
+      "isRawResource": false
+    },
+    {
+      "id": "concrete",
+      "name": "Concrete",
+      "description": "Basic construction material",
+      "category": "BasicPart",
+      "isRawResource": false
+    },
+    {
+      "id": "reinforced_iron_plate",
+      "name": "Reinforced Iron Plate",
+      "description": "Strengthened iron plate for advanced construction",
+      "category": "IntermediatePart",
+      "isRawResource": false
+    },
+    {
+      "id": "rotor",
+      "name": "Rotor",
+      "description": "Rotating component for machines",
+      "category": "IntermediatePart",
+      "isRawResource": false
+    },
+    {
+      "id": "modular_frame",
+      "name": "Modular Frame",
+      "description": "Structural component for complex machinery",
+      "category": "IntermediatePart",
+      "isRawResource": false
+    },
+    {
+      "id": "motor",
+      "name": "Motor",
+      "description": "Motorized component for advanced machinery",
+      "category": "AdvancedPart",
+      "isRawResource": false
+    },
+    {
+      "id": "computer",
+      "name": "Computer",
+      "description": "Advanced computational component",
+      "category": "AdvancedPart",
+      "isRawResource": false
+    },
+    {
+      "id": "smart_plating",
+      "name": "Smart Plating",
+      "description": "Space Elevator construction component",
+      "category": "SpaceElevator",
+      "isRawResource": false
+    },
+    {
+      "id": "versatile_framework",
+      "name": "Versatile Framework",
+      "description": "Space Elevator construction component",
+      "category": "SpaceElevator",
+      "isRawResource": false
+    },
+    {
+      "id": "automated_wiring",
+      "name": "Automated Wiring",
+      "description": "Space Elevator construction component",
+      "category": "SpaceElevator",
+      "isRawResource": false
+    },
+    {
+      "id": "modular_engine",
+      "name": "Modular Engine",
+      "description": "Space Elevator construction component",
+      "category": "SpaceElevator",
+      "isRawResource": false
+    }
+  ],
+  "recipes": [
+    {
+      "id": "iron_ingot",
+      "name": "Iron Ingot",
+      "description": "Smelts Iron Ore into Iron Ingots",
+      "inputs": [
+        {
+          "itemId": "iron_ore",
+          "quantity": 1
+        }
+      ],
+      "outputs": [
+        {
+          "itemId": "iron_ingot",
+          "quantity": 1
+        }
+      ],
+      "productionTimeSeconds": 2.0,
+      "compatibleMachineIds": ["smelter"],
+      "unlockTier": 0,
+      "isAlternate": false
+    },
+    {
+      "id": "iron_plate",
+      "name": "Iron Plate",
+      "description": "Constructs Iron Plates from Iron Ingots",
+      "inputs": [
+        {
+          "itemId": "iron_ingot",
+          "quantity": 3
+        }
+      ],
+      "outputs": [
+        {
+          "itemId": "iron_plate",
+          "quantity": 2
+        }
+      ],
+      "productionTimeSeconds": 6.0,
+      "compatibleMachineIds": ["constructor"],
+      "unlockTier": 0,
+      "isAlternate": false
+    },
+    {
+      "id": "iron_rod",
+      "name": "Iron Rod",
+      "description": "Constructs Iron Rods from Iron Ingots",
+      "inputs": [
+        {
+          "itemId": "iron_ingot",
+          "quantity": 1
+        }
+      ],
+      "outputs": [
+        {
+          "itemId": "iron_rod",
+          "quantity": 1
+        }
+      ],
+      "productionTimeSeconds": 4.0,
+      "compatibleMachineIds": ["constructor"],
+      "unlockTier": 0,
+      "isAlternate": false
+    },
+    {
+      "id": "reinforced_iron_plate",
+      "name": "Reinforced Iron Plate",
+      "description": "Assembles Reinforced Iron Plates",
+      "inputs": [
+        {
+          "itemId": "iron_plate",
+          "quantity": 6
+        },
+        {
+          "itemId": "screw",
+          "quantity": 12
+        }
+      ],
+      "outputs": [
+        {
+          "itemId": "reinforced_iron_plate",
+          "quantity": 1
+        }
+      ],
+      "productionTimeSeconds": 12.0,
+      "compatibleMachineIds": ["assembler"],
+      "unlockTier": 0,
+      "isAlternate": false
+    },
+    {
+      "id": "screw",
+      "name": "Screw",
+      "description": "Constructs Screws from Iron Rods",
+      "inputs": [
+        {
+          "itemId": "iron_rod",
+          "quantity": 1
+        }
+      ],
+      "outputs": [
+        {
+          "itemId": "screw",
+          "quantity": 4
+        }
+      ],
+      "productionTimeSeconds": 6.0,
+      "compatibleMachineIds": ["constructor"],
+      "unlockTier": 0,
+      "isAlternate": false
+    },
+    {
+      "id": "copper_ingot",
+      "name": "Copper Ingot",
+      "description": "Smelts Copper Ore into Copper Ingots",
+      "inputs": [
+        {
+          "itemId": "copper_ore",
+          "quantity": 1
+        }
+      ],
+      "outputs": [
+        {
+          "itemId": "copper_ingot",
+          "quantity": 1
+        }
+      ],
+      "productionTimeSeconds": 2.0,
+      "compatibleMachineIds": ["smelter"],
+      "unlockTier": 0,
+      "isAlternate": false
+    },
+    {
+      "id": "wire",
+      "name": "Wire",
+      "description": "Constructs Wire from Copper Ingots",
+      "inputs": [
+        {
+          "itemId": "copper_ingot",
+          "quantity": 1
+        }
+      ],
+      "outputs": [
+        {
+          "itemId": "wire",
+          "quantity": 2
+        }
+      ],
+      "productionTimeSeconds": 4.0,
+      "compatibleMachineIds": ["constructor"],
+      "unlockTier": 0,
+      "isAlternate": false
+    },
+    {
+      "id": "cable",
+      "name": "Cable",
+      "description": "Constructs Cables from Wire",
+      "inputs": [
+        {
+          "itemId": "wire",
+          "quantity": 2
+        }
+      ],
+      "outputs": [
+        {
+          "itemId": "cable",
+          "quantity": 1
+        }
+      ],
+      "productionTimeSeconds": 2.0,
+      "compatibleMachineIds": ["constructor"],
+      "unlockTier": 0,
+      "isAlternate": false
+    },
+    {
+      "id": "concrete",
+      "name": "Concrete",
+      "description": "Constructs Concrete from Limestone",
+      "inputs": [
+        {
+          "itemId": "limestone",
+          "quantity": 3
+        }
+      ],
+      "outputs": [
+        {
+          "itemId": "concrete",
+          "quantity": 1
+        }
+      ],
+      "productionTimeSeconds": 4.0,
+      "compatibleMachineIds": ["constructor"],
+      "unlockTier": 0,
+      "isAlternate": false
+    },
+    {
+      "id": "rotor",
+      "name": "Rotor",
+      "description": "Assembles Rotors",
+      "inputs": [
+        {
+          "itemId": "iron_rod",
+          "quantity": 5
+        },
+        {
+          "itemId": "screw",
+          "quantity": 25
+        }
+      ],
+      "outputs": [
+        {
+          "itemId": "rotor",
+          "quantity": 1
+        }
+      ],
+      "productionTimeSeconds": 15.0,
+      "compatibleMachineIds": ["assembler"],
+      "unlockTier": 1,
+      "isAlternate": false
+    },
+    {
+      "id": "modular_frame",
+      "name": "Modular Frame",
+      "description": "Assembles Modular Frames",
+      "inputs": [
+        {
+          "itemId": "reinforced_iron_plate",
+          "quantity": 3
+        },
+        {
+          "itemId": "iron_rod",
+          "quantity": 12
+        }
+      ],
+      "outputs": [
+        {
+          "itemId": "modular_frame",
+          "quantity": 2
+        }
+      ],
+      "productionTimeSeconds": 60.0,
+      "compatibleMachineIds": ["assembler"],
+      "unlockTier": 1,
+      "isAlternate": false
+    },
+    {
+      "id": "smart_plating",
+      "name": "Smart Plating",
+      "description": "Space Elevator Part",
+      "inputs": [
+        {
+          "itemId": "reinforced_iron_plate",
+          "quantity": 1
+        },
+        {
+          "itemId": "rotor",
+          "quantity": 1
+        }
+      ],
+      "outputs": [
+        {
+          "itemId": "smart_plating",
+          "quantity": 1
+        }
+      ],
+      "productionTimeSeconds": 30.0,
+      "compatibleMachineIds": ["assembler"],
+      "unlockTier": 1,
+      "isAlternate": false
+    }
+  ]
+}

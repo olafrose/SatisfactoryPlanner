@@ -1,0 +1,78 @@
+using SatisfactoryPlanner.Core;
+
+Console.WriteLine("=== Game Data Validation Tool ===");
+Console.WriteLine();
+
+try
+{
+    var planner = new SatisfactoryPlannerService();
+    
+    // Load and display items
+    var items = await planner.GetAllItemsAsync();
+    Console.WriteLine($"Loaded {items.Count} items:");
+    
+    foreach (var category in Enum.GetValues<SatisfactoryPlanner.Core.Models.ItemCategory>())
+    {
+        var categoryItems = items.Where(i => i.Category == category).ToList();
+        if (categoryItems.Any())
+        {
+            Console.WriteLine($"  {category}: {categoryItems.Count} items");
+            foreach (var item in categoryItems.Take(3))
+            {
+                Console.WriteLine($"    - {item.Name} ({item.Id})");
+            }
+            if (categoryItems.Count > 3)
+                Console.WriteLine($"    ... and {categoryItems.Count - 3} more");
+        }
+    }
+    
+    Console.WriteLine();
+    
+    // Load and display recipes
+    var recipes = await planner.GetAvailableRecipesAsync(int.MaxValue);
+    Console.WriteLine($"Loaded {recipes.Count} recipes:");
+    
+    var recipesByTier = recipes.GroupBy(r => r.UnlockTier).OrderBy(g => g.Key);
+    foreach (var tierGroup in recipesByTier)
+    {
+        Console.WriteLine($"  Tier {tierGroup.Key}: {tierGroup.Count()} recipes");
+        foreach (var recipe in tierGroup.Take(3))
+        {
+            var inputs = string.Join(", ", recipe.Inputs.Select(i => $"{i.Quantity}x {i.Item.Name}"));
+            var outputs = string.Join(", ", recipe.Outputs.Select(o => $"{o.Quantity}x {o.Item.Name}"));
+            Console.WriteLine($"    - {recipe.Name}: {inputs} → {outputs}");
+        }
+        if (tierGroup.Count() > 3)
+            Console.WriteLine($"    ... and {tierGroup.Count() - 3} more");
+    }
+    
+    Console.WriteLine();
+    
+    // Test a complex recipe
+    Console.WriteLine("Testing complex production chain (Smart Plating):");
+    var targetItems = new Dictionary<string, double>
+    {
+        ["smart_plating"] = 1.0 // 1 per minute
+    };
+
+    var graph = await planner.PlanProductionAsync(targetItems, gameTier: 1);
+    Console.WriteLine($"  Production nodes: {graph.Nodes.Count}");
+    Console.WriteLine($"  Total power: {graph.TotalPowerConsumption:F1} MW");
+    Console.WriteLine($"  Required resources:");
+    foreach (var resource in graph.RequiredResources)
+    {
+        Console.WriteLine($"    - {resource.Item.Name}: {resource.QuantityPerMinute:F1}/min");
+    }
+    
+    Console.WriteLine();
+    Console.WriteLine("✅ All data loaded and validated successfully!");
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"❌ Error: {ex.Message}");
+    Console.WriteLine($"Stack trace: {ex.StackTrace}");
+}
+
+Console.WriteLine();
+Console.WriteLine("Press any key to exit...");
+Console.ReadKey();

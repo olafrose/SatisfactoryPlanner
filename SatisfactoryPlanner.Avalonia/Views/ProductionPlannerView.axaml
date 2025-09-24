@@ -34,52 +34,21 @@
                      FontSize="14"/>
         </Border>
         
-        <!-- Production Tree -->
+        <!-- Production Flow Graph -->
         <ScrollViewer Grid.Row="1"
-                      Padding="8">
+                      Name="ProductionGraphScrollViewer"
+                      AllowAutoHide="False">
           
-          <TreeView ItemsSource="{Binding ProductionNodes}">
-            <TreeView.ItemTemplate>
-              <TreeDataTemplate DataType="vm:ProductionNodeViewModel"
-                                ItemsSource="{Binding Children}">
-                <StackPanel Orientation="Horizontal"
-                            Margin="0,2">
-                  
-                  <!-- Building icon placeholder -->
-                  <Border Width="24" Height="24"
-                          Background="{DynamicResource SystemControlBackgroundBaseMediumBrush}"
-                          CornerRadius="3"
-                          Margin="0,0,8,0">
-                    <TextBlock Text="🏭"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               FontSize="12"/>
-                  </Border>
-                  
-                  <StackPanel>
-                    <!-- Product name -->
-                    <TextBlock Text="{Binding Name}"
-                               FontWeight="Medium"
-                               FontSize="13"/>
-                    
-                    <!-- Building and rate info -->
-                    <StackPanel Orientation="Horizontal">
-                      <TextBlock Text="{Binding BuildingCount, StringFormat='{}{0:F1}x'}"
-                                 FontSize="11"
-                                 Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
-                      <TextBlock Text="{Binding BuildingName}"
-                                 FontSize="11"
-                                 Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
-                                 Margin="4,0,0,0"/>
-                      <TextBlock Text="{Binding ProductionRate, StringFormat=' • {0:F1}/min'}"
-                                 FontSize="11"
-                                 Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
-                    </StackPanel>
-                  </StackPanel>
-                </StackPanel>
-              </TreeDataTemplate>
-            </TreeView.ItemTemplate>
-          </TreeView>
+          <Border Background="LightGray" 
+                  MinWidth="1000" 
+                  MinHeight="600">
+            <!-- This will be populated programmatically with production nodes -->
+            <TextBlock Text="Production Flow Graph - Nodes will appear here"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="14"
+                       Foreground="Gray"/>
+          </Border>
         </ScrollViewer>
       </Grid>
     </Border>

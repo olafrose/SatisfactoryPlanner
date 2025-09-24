@@ -1,0 +1,141 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:SatisfactoryPlanner.Avalonia.ViewModels"
+             x:Class="SatisfactoryPlanner.Avalonia.Views.MilestoneManagerView"
+             x:DataType="vm:MilestoneManagerViewModel">
+
+  <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+          BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+          BorderThickness="0,0,0,1">
+    
+    <Grid>
+      <!-- Collapsed state - tab headers -->
+      <StackPanel IsVisible="{Binding !IsPanelExpanded}" 
+                  Orientation="Horizontal" 
+                  Height="40">
+      
+      <!-- Toggle button -->
+      <Button Command="{Binding TogglePanelCommand}"
+              Background="Transparent"
+              BorderThickness="0"
+              Padding="8"
+              VerticalAlignment="Center">
+        <Path Data="M7 14l5-5 5 5z" 
+              Fill="{DynamicResource SystemControlForegroundBaseHighBrush}"
+              Width="16" Height="16"/>
+      </Button>
+      
+      <!-- Tier tabs -->
+      <ItemsControl ItemsSource="{Binding Tiers}">
+        <ItemsControl.ItemsPanel>
+          <ItemsPanelTemplate>
+            <StackPanel Orientation="Horizontal"/>
+          </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <Button Content="{Binding Name}"
+                    Command="{Binding $parent[UserControl].((vm:MilestoneManagerViewModel)DataContext).SelectTierCommand}"
+                    CommandParameter="{Binding}"
+                    Classes="milestone-tier"
+                    Classes.selected="{Binding IsSelected}"
+                    MinWidth="80"/>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </StackPanel>
+    
+    <!-- Expanded state - full milestone panel -->
+    <Grid IsVisible="{Binding IsPanelExpanded}"
+          MaxHeight="300">
+      
+      <Grid.RowDefinitions>
+        <RowDefinition Height="40"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+      
+      <!-- Header with tabs and collapse button -->
+      <Grid Grid.Row="0" 
+            Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}">
+        
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        
+        <!-- Tier tabs -->
+        <ItemsControl Grid.Column="0" 
+                      ItemsSource="{Binding Tiers}"
+                      VerticalAlignment="Center">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <StackPanel Orientation="Horizontal" Margin="8,0"/>
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <Button Content="{Binding Name}"
+                      Command="{Binding $parent[UserControl].((vm:MilestoneManagerViewModel)DataContext).SelectTierCommand}"
+                      CommandParameter="{Binding}"
+                      Classes="milestone-tier"
+                      Classes.selected="{Binding IsSelected}"
+                      MinWidth="100"/>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        
+        <!-- Collapse button -->
+        <Button Grid.Column="1"
+                Command="{Binding TogglePanelCommand}"
+                Background="Transparent"
+                BorderThickness="0"
+                Padding="8"
+                VerticalAlignment="Center"
+                Margin="8,0">
+          <Path Data="M7 10l5 5 5-5z" 
+                Fill="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                Width="16" Height="16"/>
+        </Button>
+      </Grid>
+      
+      <!-- Milestone content -->
+      <ScrollViewer Grid.Row="1" 
+                    Padding="16"
+                    IsVisible="{Binding SelectedTier, Converter={x:Static ObjectConverters.IsNotNull}}">
+        
+        <ItemsControl ItemsSource="{Binding SelectedTier.Milestones}">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <WrapPanel/>
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <Button Command="{Binding ToggleCompletionCommand}"
+                      Classes="milestone-item"
+                      Classes.completed="{Binding IsCompleted}">
+                
+                <StackPanel>
+                  <!-- Milestone icon -->
+                  <Image Source="{Binding IconPath}"
+                         Classes="milestone-icon"/>
+                  
+                  <!-- Milestone name -->
+                  <TextBlock Text="{Binding Name}"
+                             TextWrapping="Wrap"
+                             TextAlignment="Center"
+                             FontSize="11"
+                             MaxLines="2"/>
+                </StackPanel>
+              </Button>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </ScrollViewer>
+      </Grid>
+    </Grid>
+  </Border>
+</UserControl>

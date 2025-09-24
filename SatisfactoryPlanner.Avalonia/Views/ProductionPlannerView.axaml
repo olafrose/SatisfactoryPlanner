@@ -1,0 +1,203 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:SatisfactoryPlanner.Avalonia.ViewModels"
+             x:Class="SatisfactoryPlanner.Avalonia.Views.ProductionPlannerView"
+             x:DataType="vm:ProductionPlannerViewModel">
+
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" MinWidth="300"/>
+      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="350" MaxWidth="400"/>
+    </Grid.ColumnDefinitions>
+
+    <!-- Left Panel - Production Tree -->
+    <Border Grid.Column="0"
+            Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+            BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+            BorderThickness="0,0,1,0">
+      
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Header -->
+        <Border Grid.Row="0"
+                Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                BorderThickness="0,0,0,1"
+                Padding="16,12">
+          <TextBlock Text="Production Chain"
+                     FontWeight="SemiBold"
+                     FontSize="14"/>
+        </Border>
+        
+        <!-- Production Tree -->
+        <ScrollViewer Grid.Row="1"
+                      Padding="8">
+          
+          <TreeView ItemsSource="{Binding ProductionNodes}">
+            <TreeView.ItemTemplate>
+              <TreeDataTemplate DataType="vm:ProductionNodeViewModel"
+                                ItemsSource="{Binding Children}">
+                <StackPanel Orientation="Horizontal"
+                            Margin="0,2">
+                  
+                  <!-- Building icon placeholder -->
+                  <Border Width="24" Height="24"
+                          Background="{DynamicResource SystemControlBackgroundBaseMediumBrush}"
+                          CornerRadius="3"
+                          Margin="0,0,8,0">
+                    <TextBlock Text="🏭"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="12"/>
+                  </Border>
+                  
+                  <StackPanel>
+                    <!-- Product name -->
+                    <TextBlock Text="{Binding Name}"
+                               FontWeight="Medium"
+                               FontSize="13"/>
+                    
+                    <!-- Building and rate info -->
+                    <StackPanel Orientation="Horizontal">
+                      <TextBlock Text="{Binding BuildingCount, StringFormat='{}{0:F1}x'}"
+                                 FontSize="11"
+                                 Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+                      <TextBlock Text="{Binding BuildingName}"
+                                 FontSize="11"
+                                 Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                 Margin="4,0,0,0"/>
+                      <TextBlock Text="{Binding ProductionRate, StringFormat=' • {0:F1}/min'}"
+                                 FontSize="11"
+                                 Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+                    </StackPanel>
+                  </StackPanel>
+                </StackPanel>
+              </TreeDataTemplate>
+            </TreeView.ItemTemplate>
+          </TreeView>
+        </ScrollViewer>
+      </Grid>
+    </Border>
+
+    <!-- Splitter -->
+    <GridSplitter Grid.Column="1"
+                  Width="4"
+                  Background="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                  HorizontalAlignment="Center"/>
+
+    <!-- Right Panel - Product Selection -->
+    <Border Grid.Column="2"
+            Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+            IsVisible="{Binding IsProductSelectionPanelOpen}">
+      
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Header -->
+        <Border Grid.Row="0"
+                Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                BorderThickness="0,0,0,1"
+                Padding="16,12">
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Grid.Column="0"
+                       Text="Production Targets"
+                       FontWeight="SemiBold"
+                       FontSize="14"
+                       VerticalAlignment="Center"/>
+            
+            <!-- Minimize button -->
+            <Button Grid.Column="1"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Padding="4"
+                    VerticalAlignment="Center">
+              <Path Data="M6 19h12v2H6z" 
+                    Fill="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                    Width="14" Height="14"/>
+            </Button>
+          </Grid>
+        </Border>
+        
+        <!-- Target list -->
+        <ScrollViewer Grid.Row="1"
+                      Padding="16">
+          
+          <ItemsControl ItemsSource="{Binding ProductionTargets}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Border Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                        BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                        BorderThickness="1"
+                        CornerRadius="4"
+                        Padding="12"
+                        Margin="0,0,0,8">
+                  
+                  <Grid>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="Auto"/>
+                      <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <!-- Product selection -->
+                    <ComboBox Grid.Row="0"
+                              Margin="0,0,0,8"
+                              HorizontalAlignment="Stretch">
+                      <ComboBoxItem Content="{Binding DisplayName}"/>
+                    </ComboBox>
+                    
+                    <!-- Rate input -->
+                    <Grid Grid.Row="1">
+                      <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                      </Grid.ColumnDefinitions>
+                      
+                      <NumericUpDown Grid.Column="0"
+                                     Value="{Binding TargetRate}"
+                                     Minimum="0"
+                                     Maximum="9999"
+                                     Increment="10"
+                                     FormatString="F1"/>
+                      
+                      <TextBlock Grid.Column="1"
+                                 Text="/min"
+                                 VerticalAlignment="Center"
+                                 Margin="8,0,0,0"
+                                 Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+                    </Grid>
+                  </Grid>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </ScrollViewer>
+        
+        <!-- Add target button -->
+        <Border Grid.Row="2"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                BorderThickness="0,1,0,0"
+                Padding="16">
+          <Button Content="+ Add Production Target"
+                  HorizontalAlignment="Stretch"
+                  HorizontalContentAlignment="Center"
+                  Padding="12"/>
+        </Border>
+      </Grid>
+    </Border>
+  </Grid>
+</UserControl>

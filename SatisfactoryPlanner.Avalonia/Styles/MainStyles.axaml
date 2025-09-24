@@ -1,0 +1,78 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  
+  <!-- Milestone tier tab styles -->
+  <Style Selector="Button.milestone-tier">
+    <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundBaseLowBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="4,4,0,0"/>
+    <Setter Property="Margin" Value="0,0,2,0"/>
+    <Setter Property="Padding" Value="16,8"/>
+    <Setter Property="FontWeight" Value="Medium"/>
+  </Style>
+  
+  <Style Selector="Button.milestone-tier.selected">
+    <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundAltHighBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+    <Setter Property="BorderThickness" Value="1,1,1,0"/>
+  </Style>
+  
+  <Style Selector="Button.milestone-tier:pointerover">
+    <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundBaseMediumBrush}"/>
+  </Style>
+  
+  <!-- Milestone item button styles -->
+  <Style Selector="Button.milestone-item">
+    <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundBaseLowBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="4"/>
+    <Setter Property="Padding" Value="8"/>
+    <Setter Property="Margin" Value="4"/>
+    <Setter Property="Width" Value="120"/>
+    <Setter Property="Height" Value="100"/>
+    <Setter Property="VerticalContentAlignment" Value="Center"/>
+  </Style>
+  
+  <Style Selector="Button.milestone-item:pointerover">
+    <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundBaseMediumBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+  </Style>
+  
+  <Style Selector="Button.milestone-item.completed">
+    <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundAccentBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource SystemControlBackgroundAccentBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundAltHighBrush}"/>
+  </Style>
+  
+  <Style Selector="Button.milestone-item.completed:pointerover">
+    <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundAccentBrush}"/>
+    <Setter Property="Opacity" Value="0.9"/>
+  </Style>
+  
+  <!-- Icon styles for dark/light states -->
+  <Style Selector="Image.milestone-icon">
+    <Setter Property="Width" Value="32"/>
+    <Setter Property="Height" Value="32"/>
+    <Setter Property="Margin" Value="0,0,0,4"/>
+  </Style>
+  
+  <!-- Production tree styles -->
+  <Style Selector="TreeViewItem">
+    <Setter Property="Padding" Value="4,2"/>
+  </Style>
+  
+  <Style Selector="TreeViewItem:selected /template/ ContentPresenter#PART_HeaderPresenter">
+    <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundListMediumBrush}"/>
+  </Style>
+  
+  <!-- Panel collapse/expand animations -->
+  <Style Selector="Grid.milestone-panel">
+    <Setter Property="Transitions">
+      <Transitions>
+        <DoubleTransition Property="MaxHeight" Duration="0:0:0.2"/>
+      </Transitions>
+    </Setter>
+  </Style>
+</Styles>

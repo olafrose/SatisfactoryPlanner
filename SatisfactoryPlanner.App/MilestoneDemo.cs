@@ -1,6 +1,8 @@
 using SatisfactoryPlanner.Core.Data;
 using SatisfactoryPlanner.Core.Models;
 using SatisfactoryPlanner.Core.Services;
+using SatisfactoryPlanner.GameData;
+using SatisfactoryPlanner.GameData.Models;
 
 namespace SatisfactoryPlanner.App;
 
@@ -12,9 +14,9 @@ public class MilestoneDemo
         Console.WriteLine("=== MILESTONE-BASED PROGRESSION DEMO ===");
         
         // Setup repositories
-        var dataPath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "SatisfactoryPlanner.Core", "Data", "GameData", "GameData.json");
-        var itemLoader = new ItemLoader(dataPath);
-        var milestoneRepo = new InMemoryMilestoneRepository(dataPath, itemLoader);
+        var dataDirectory = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "SatisfactoryPlanner.GameData", "Data", "GameData");
+        var gameDataService = new GameDataService(dataDirectory);
+        var milestoneRepo = new InMemoryMilestoneRepository(gameDataService);
         
         // Load all milestones
         var allMilestones = await milestoneRepo.GetAllMilestonesAsync();

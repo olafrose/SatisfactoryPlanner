@@ -7,9 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="Data\GameData\GameData.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="..\SatisfactoryPlanner.GameData\SatisfactoryPlanner.GameData.csproj" />
   </ItemGroup>
 
 </Project>

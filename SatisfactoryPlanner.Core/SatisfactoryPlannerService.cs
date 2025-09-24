@@ -1,6 +1,10 @@
 using SatisfactoryPlanner.Core.Data;
 using SatisfactoryPlanner.Core.Models;
 using SatisfactoryPlanner.Core.Services;
+using SatisfactoryPlanner.GameData;
+using SatisfactoryPlanner.GameData.Models;
+using GameDataItem = SatisfactoryPlanner.GameData.Models.Item;
+using GameDataItemQuantity = SatisfactoryPlanner.GameData.Models.ItemQuantity;
 
 namespace SatisfactoryPlanner.Core;
 
@@ -11,66 +15,72 @@ public class SatisfactoryPlannerService
 {
     private readonly ProductionGraphBuilder _graphBuilder;
     private readonly IRecipeRepository _recipeRepository;
-    private readonly IMachineRepository _machineRepository;
+    private readonly IBuildingRepository _buildingRepository;
     private readonly IItemRepository _itemRepository;
 
     public SatisfactoryPlannerService()
     {
         // Initialize with consistent repositories
-        var dataFilePath = GetDefaultDataFilePath();
-        var itemLoader = new ItemLoader(dataFilePath);
-        _recipeRepository = new InMemoryRecipeRepository(dataFilePath, itemLoader);
-        _machineRepository = new InMemoryMachineRepository(dataFilePath);
-        _itemRepository = new InMemoryItemRepository(dataFilePath);
-        _graphBuilder = new ProductionGraphBuilder(_recipeRepository, _machineRepository);
+        var gameDataDirectory = GetDefaultGameDataDirectory();
+        var gameDataService = new GameDataService(gameDataDirectory);
+        _recipeRepository = new InMemoryRecipeRepository(gameDataService);
+        _buildingRepository = new InMemoryBuildingRepository(gameDataService);
+        _itemRepository = new InMemoryItemRepository(gameDataService);
+        _graphBuilder = new ProductionGraphBuilder(_recipeRepository, _buildingRepository);
     }
 
-    public SatisfactoryPlannerService(string dataFilePath)
+    public SatisfactoryPlannerService(string gameDataDirectory)
     {
-        // Initialize with custom data file
-        var itemLoader = new ItemLoader(dataFilePath);
-        _recipeRepository = new InMemoryRecipeRepository(dataFilePath, itemLoader);
-        _machineRepository = new InMemoryMachineRepository(dataFilePath);
-        _itemRepository = new InMemoryItemRepository(dataFilePath);
-        _graphBuilder = new ProductionGraphBuilder(_recipeRepository, _machineRepository);
+        // Initialize with custom data directory
+        var gameDataService = new GameDataService(gameDataDirectory);
+        _recipeRepository = new InMemoryRecipeRepository(gameDataService);
+        _buildingRepository = new InMemoryBuildingRepository(gameDataService);
+        _itemRepository = new InMemoryItemRepository(gameDataService);
+        _graphBuilder = new ProductionGraphBuilder(_recipeRepository, _buildingRepository);
     }
 
     public SatisfactoryPlannerService(
         IRecipeRepository recipeRepository,
-        IMachineRepository machineRepository,
+        IBuildingRepository buildingRepository,
         IItemRepository itemRepository)
     {
         _recipeRepository = recipeRepository;
-        _machineRepository = machineRepository;
+        _buildingRepository = buildingRepository;
         _itemRepository = itemRepository;
-        _graphBuilder = new ProductionGraphBuilder(_recipeRepository, _machineRepository);
+        _graphBuilder = new ProductionGraphBuilder(_recipeRepository, _buildingRepository);
     }
 
     /// <summary>
-    /// Gets the default path to the game data file
+    /// Gets the default game data directory path
     /// </summary>
-    private static string GetDefaultDataFilePath()
+    private static string GetDefaultGameDataDirectory()
     {
-        // Try to find the data file relative to the assembly location
+        // Try to find the data directory relative to the assembly location
         var assemblyDir = Path.GetDirectoryName(typeof(SatisfactoryPlannerService).Assembly.Location);
         if (assemblyDir != null)
         {
-            var dataPath = Path.Combine(assemblyDir, "Data", "GameData", "GameData.json");
-            if (File.Exists(dataPath))
+            var dataPath = Path.Combine(assemblyDir, "Data", "GameData");
+            if (Directory.Exists(dataPath))
                 return dataPath;
         }
 
         // Try relative to current directory (development scenario)
-        var currentDirPath = Path.Combine("Data", "GameData", "GameData.json");
-        if (File.Exists(currentDirPath))
+        var currentDirPath = Path.Combine("Data", "GameData");
+        if (Directory.Exists(currentDirPath))
             return currentDirPath;
 
-        // Try in the Core project directory (for testing)
-        var coreProjectPath = Path.Combine("..", "..", "..", "SatisfactoryPlanner.Core", "Data", "GameData", "GameData.json");
-        if (File.Exists(coreProjectPath))
+        // Try in the GameData library project directory
+        var gameDataProjectPath = Path.Combine("..", "..", "..", "SatisfactoryPlanner.GameData", "Data", "GameData");
+        if (Directory.Exists(gameDataProjectPath))
+            return Path.GetFullPath(gameDataProjectPath);
+
+        // Try in the old Core project directory (for backward compatibility)
+        var coreProjectPath = Path.Combine("..", "..", "..", "SatisfactoryPlanner.Core", "Data", "GameData");
+        if (Directory.Exists(coreProjectPath))
             return Path.GetFullPath(coreProjectPath);
 
-        throw new FileNotFoundException("Could not find GameData.json file. Please ensure it exists in the Data/GameData directory.");
+        // If not found, return a default path that can be created
+        return Path.Combine("Data", "GameData");
     }
 
     /// <summary>
@@ -85,7 +95,7 @@ public class SatisfactoryPlannerService
         int gameTier,
         ProductionGraphOptions? options = null)
     {
-        var targetOutputs = new List<ItemQuantity>();
+        var targetOutputs = new List<SatisfactoryPlanner.GameData.Models.ItemQuantity>();
         
         foreach (var (itemId, quantity) in targetItems)
         {
@@ -138,11 +148,21 @@ public class SatisfactoryPlannerService
     }
 
     /// <summary>
-    /// Gets all available machines for a specific tier
+    /// Gets all available buildings for a specific tier
     /// </summary>
+    public async Task<List<Building>> GetAvailableBuildingsAsync(int gameTier)
+    {
+        return await _buildingRepository.GetBuildingsByTierAsync(gameTier);
+    }
+
+    /// <summary>
+    /// Gets all available machines for a specific tier (obsolete - use GetAvailableBuildingsAsync)
+    /// </summary>
+    [Obsolete("Use GetAvailableBuildingsAsync instead of GetAvailableMachinesAsync to align with wiki terminology")]
     public async Task<List<Machine>> GetAvailableMachinesAsync(int gameTier)
     {
-        return await _machineRepository.GetMachinesByTierAsync(gameTier);
+        var buildings = await _buildingRepository.GetBuildingsByTierAsync(gameTier);
+        return buildings.Cast<Machine>().ToList();
     }
 
     /// <summary>
@@ -160,7 +180,7 @@ public class SatisfactoryPlannerService
     {
         return new ProductionAnalysis
         {
-            TotalMachines = graph.Nodes.Sum(n => (int)Math.Ceiling(n.MachineCount)),
+            TotalMachines = graph.Nodes.Sum(n => (int)Math.Ceiling(n.BuildingCount)),
             TotalPowerConsumption = graph.TotalPowerConsumption,
             RequiredResources = graph.RequiredResources,
             BottleneckNodes = FindBottlenecks(graph),
@@ -181,7 +201,7 @@ public class SatisfactoryPlannerService
                 if (requiredInput == null) return 0;
                 
                 return (requiredInput.Quantity * 60.0 / output.Recipe.ProductionTimeSeconds) 
-                       * output.MachineCount * output.ClockSpeed;
+                       * output.BuildingCount * output.ClockSpeed;
             });
             
             return node.ActualProductionRate < totalDemand * 0.98; // 2% tolerance

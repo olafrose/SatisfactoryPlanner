@@ -1,5 +1,6 @@
-using SatisfactoryPlanner.Core.Models;
 using SatisfactoryPlanner.Core.Services;
+using SatisfactoryPlanner.GameData;
+using SatisfactoryPlanner.GameData.Models;
 
 namespace SatisfactoryPlanner.Core.Data;
 
@@ -8,24 +9,19 @@ namespace SatisfactoryPlanner.Core.Data;
 /// </summary>
 public class InMemoryMilestoneRepository : IMilestoneRepository
 {
-    private readonly MilestoneLoader _milestoneLoader;
+    private readonly GameDataService _gameDataService;
     private List<Milestone>? _milestones;
 
-    public InMemoryMilestoneRepository(MilestoneLoader milestoneLoader)
+    public InMemoryMilestoneRepository(GameDataService gameDataService)
     {
-        _milestoneLoader = milestoneLoader;
-    }
-
-    public InMemoryMilestoneRepository(string dataFilePath, ItemLoader itemLoader)
-    {
-        _milestoneLoader = new MilestoneLoader(dataFilePath, itemLoader);
+        _gameDataService = gameDataService;
     }
 
     private async Task EnsureDataLoadedAsync()
     {
         if (_milestones == null)
         {
-            _milestones = await _milestoneLoader.LoadMilestonesAsync();
+            _milestones = await _gameDataService.LoadMilestonesAsync();
         }
     }
 

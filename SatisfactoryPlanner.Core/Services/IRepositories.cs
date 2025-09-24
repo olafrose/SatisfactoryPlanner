@@ -1,4 +1,4 @@
-using SatisfactoryPlanner.Core.Models;
+using SatisfactoryPlanner.GameData.Models;
 
 namespace SatisfactoryPlanner.Core.Services;
 
@@ -16,8 +16,21 @@ public interface IRecipeRepository
 }
 
 /// <summary>
-/// Repository interface for managing machines
+/// Repository interface for managing buildings
 /// </summary>
+public interface IBuildingRepository
+{
+    Task<List<Building>> GetAllBuildingsAsync();
+    Task<Building?> GetBuildingByIdAsync(string id);
+    Task<List<Building>> GetBuildingsForRecipeAsync(string recipeId);
+    Task<List<Building>> GetBuildingsByTypeAsync(BuildingType type);
+    Task<List<Building>> GetBuildingsByTierAsync(int maxTier);
+}
+
+/// <summary>
+/// Repository interface for managing machines (deprecated - use IBuildingRepository)
+/// </summary>
+[Obsolete("Use IBuildingRepository instead of IMachineRepository to align with wiki terminology")]
 public interface IMachineRepository
 {
     Task<List<Machine>> GetAllMachinesAsync();

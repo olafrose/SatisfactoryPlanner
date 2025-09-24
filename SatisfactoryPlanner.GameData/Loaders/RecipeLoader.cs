@@ -1,19 +1,20 @@
-using SatisfactoryPlanner.Core.Models;
+using SatisfactoryPlanner.GameData.Models;
 
-namespace SatisfactoryPlanner.Core.Data;
+namespace SatisfactoryPlanner.GameData.Loaders;
 
 /// <summary>
 /// Loads recipes from JSON and converts them to domain models
 /// </summary>
 public class RecipeLoader
 {
-    private readonly JsonDataLoader<GameDataDto> _jsonLoader;
+    private readonly JsonDataLoader<List<RecipeDto>> _jsonLoader;
     private readonly ItemLoader _itemLoader;
     private List<Recipe>? _cachedRecipes;
 
-    public RecipeLoader(string filePath, ItemLoader itemLoader)
+    public RecipeLoader(string gameDataDirectory, ItemLoader itemLoader)
     {
-        _jsonLoader = new JsonDataLoader<GameDataDto>(filePath);
+        var recipesFilePath = Path.Combine(gameDataDirectory, "recipes.json");
+        _jsonLoader = new JsonDataLoader<List<RecipeDto>>(recipesFilePath);
         _itemLoader = itemLoader;
     }
 
@@ -25,11 +26,20 @@ public class RecipeLoader
         if (_cachedRecipes != null)
             return _cachedRecipes;
 
-        var gameData = await _jsonLoader.LoadAsync();
+        var recipeDtos = await _jsonLoader.LoadAsync();
         var itemLookup = await _itemLoader.LoadItemsLookupAsync();
         
-        _cachedRecipes = gameData.Recipes.Select(dto => ConvertToRecipe(dto, itemLookup)).ToList();
+        _cachedRecipes = recipeDtos.Select(dto => ConvertToRecipe(dto, itemLookup)).ToList();
         return _cachedRecipes;
+    }
+
+    /// <summary>
+    /// Loads recipes and returns them as a lookup dictionary by ID
+    /// </summary>
+    public async Task<Dictionary<string, Recipe>> LoadRecipesLookupAsync()
+    {
+        var recipes = await LoadRecipesAsync();
+        return recipes.ToDictionary(r => r.Id, r => r);
     }
 
     private static Recipe ConvertToRecipe(RecipeDto dto, Dictionary<string, Item> itemLookup)

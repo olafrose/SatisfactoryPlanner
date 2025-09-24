@@ -1,4 +1,4 @@
-namespace SatisfactoryPlanner.Core.Models;
+namespace SatisfactoryPlanner.GameData.Models;
 
 /// <summary>
 /// Represents a recipe for producing items in Satisfactory

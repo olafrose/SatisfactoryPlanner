@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace SatisfactoryPlanner.Core.Data;
+namespace SatisfactoryPlanner.GameData.Loaders;
 
 /// <summary>
 /// Generic JSON data loader that can load and cache any type from a JSON file

@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-
-namespace SatisfactoryPlanner.Core.Models;
+namespace SatisfactoryPlanner.GameData.Models;
 
 /// <summary>
 /// Represents a milestone within a tier that unlocks specific content
@@ -56,4 +54,8 @@ public class Milestone
     /// Cost to unlock this milestone (items required)
     /// </summary>
     public List<ItemQuantity> Cost { get; set; } = new();
+
+    public override string ToString() => Name;
+    public override bool Equals(object? obj) => obj is Milestone milestone && Id == milestone.Id;
+    public override int GetHashCode() => Id.GetHashCode();
 }

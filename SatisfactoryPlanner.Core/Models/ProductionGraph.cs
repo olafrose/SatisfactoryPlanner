@@ -1,3 +1,5 @@
+using SatisfactoryPlanner.GameData.Models;
+
 namespace SatisfactoryPlanner.Core.Models;
 
 /// <summary>
@@ -7,17 +9,43 @@ public class ProductionNode
 {
     public string Id { get; set; } = Guid.NewGuid().ToString();
     public Recipe Recipe { get; set; } = new();
-    public Machine Machine { get; set; } = new();
+    public Building Building { get; set; } = new();
     
     /// <summary>
-    /// Number of machines required for this production step
+    /// Number of buildings required for this production step
     /// </summary>
-    public double MachineCount { get; set; } = 1.0;
+    public double BuildingCount { get; set; } = 1.0;
     
     /// <summary>
     /// Clock speed multiplier (1.0 = 100%, 2.5 = 250% max overclock)
     /// </summary>
     public double ClockSpeed { get; set; } = 1.0;
+
+    // Backward compatibility properties
+    [Obsolete("Use Building instead of Machine to align with wiki terminology")]
+    public Machine Machine 
+    { 
+        get => Building as Machine ?? new Machine 
+        { 
+            Id = Building.Id, 
+            Name = Building.Name, 
+            Description = Building.Description,
+            Type = (MachineType)Building.Type,
+            ProductionSpeed = Building.ProductionSpeed,
+            PowerConsumption = Building.PowerConsumption,
+            MaxInputConnections = Building.MaxInputConnections,
+            MaxOutputConnections = Building.MaxOutputConnections,
+            CanOverclock = Building.CanOverclock
+        }; 
+        set => Building = value; 
+    }
+    
+    [Obsolete("Use BuildingCount instead of MachineCount to align with wiki terminology")]  
+    public double MachineCount 
+    { 
+        get => BuildingCount; 
+        set => BuildingCount = value; 
+    }
     
     /// <summary>
     /// Target production rate per minute for the primary output
@@ -25,14 +53,14 @@ public class ProductionNode
     public double TargetProductionRate { get; set; }
     
     /// <summary>
-    /// Actual production rate per minute (accounting for machine count and clock speed)
+    /// Actual production rate per minute (accounting for building count and clock speed)
     /// </summary>
     public double ActualProductionRate => CalculateActualProductionRate();
     
     /// <summary>
-    /// Power consumption for all machines in this node
+    /// Power consumption for all buildings in this node
     /// </summary>
-    public double TotalPowerConsumption => Machine.PowerConsumption * MachineCount * Math.Pow(ClockSpeed, 1.6);
+    public double TotalPowerConsumption => Building.PowerConsumption * BuildingCount * Math.Pow(ClockSpeed, 1.6);
     
     /// <summary>
     /// Input nodes that feed into this production step
@@ -51,10 +79,10 @@ public class ProductionNode
 
         var primaryOutput = Recipe.Outputs.First();
         var baseRate = (primaryOutput.Quantity * 60.0) / Recipe.ProductionTimeSeconds;
-        return baseRate * MachineCount * ClockSpeed * Machine.ProductionSpeed;
+        return baseRate * BuildingCount * ClockSpeed * Building.ProductionSpeed;
     }
 
-    public override string ToString() => $"{Recipe.Name} ({MachineCount:F1}x {Machine.Name})";
+    public override string ToString() => $"{Recipe.Name} ({BuildingCount:F1}x {Building.Name})";
 }
 
 /// <summary>
@@ -112,7 +140,7 @@ public class ProductionGraph
                 if (input.Item.IsRawResource)
                 {
                     var requiredRate = (input.Quantity * 60.0 / rootNode.Recipe.ProductionTimeSeconds) 
-                                     * rootNode.MachineCount * rootNode.ClockSpeed;
+                                     * rootNode.BuildingCount * rootNode.ClockSpeed;
                     
                     if (resources.ContainsKey(input.Item.Id))
                         resources[input.Item.Id] += requiredRate;

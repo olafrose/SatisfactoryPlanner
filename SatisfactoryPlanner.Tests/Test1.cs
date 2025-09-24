@@ -78,12 +78,12 @@ public sealed class ProductionPlannerTests
     {
         // Act
         var items = await _planner.GetAllItemsAsync();
-        var machines = await _planner.GetAvailableMachinesAsync(0);
+        var buildings = await _planner.GetAvailableBuildingsAsync(0);
         var recipes = await _planner.GetAvailableRecipesAsync(0);
 
         // Assert
         Assert.IsTrue(items.Count > 0);
-        Assert.IsTrue(machines.Count > 0);
+        Assert.IsTrue(buildings.Count > 0);
         Assert.IsTrue(recipes.Count > 0);
         
         // Check that we have basic items

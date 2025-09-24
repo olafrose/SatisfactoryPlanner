@@ -1,3 +1,6 @@
+# Icon files (keep local but don't commit)
+SatisfactoryPlanner.GameData/Data/Icons/
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/

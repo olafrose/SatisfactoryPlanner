@@ -1,4 +1,5 @@
 using SatisfactoryPlanner.Core.Models;
+using SatisfactoryPlanner.GameData.Models;
 
 namespace SatisfactoryPlanner.Core.Services;
 
@@ -8,12 +9,12 @@ namespace SatisfactoryPlanner.Core.Services;
 public class ProductionGraphBuilder
 {
     private readonly IRecipeRepository _recipeRepository;
-    private readonly IMachineRepository _machineRepository;
+    private readonly IBuildingRepository _buildingRepository;
 
-    public ProductionGraphBuilder(IRecipeRepository recipeRepository, IMachineRepository machineRepository)
+    public ProductionGraphBuilder(IRecipeRepository recipeRepository, IBuildingRepository buildingRepository)
     {
         _recipeRepository = recipeRepository;
-        _machineRepository = machineRepository;
+        _buildingRepository = buildingRepository;
     }
 
     /// <summary>
@@ -122,37 +123,37 @@ public class ProductionGraphBuilder
 
         var selectedRecipe = SelectBestRecipe(validRecipes, options);
         
-        // Find the best machine for this recipe
-        var availableMachines = await _machineRepository.GetMachinesForRecipeAsync(selectedRecipe.Id);
-        // Note: Machine filtering by milestones should be handled at a higher level
-        var validMachines = availableMachines.ToList();
+        // Find the best building for this recipe
+        var availableBuildings = await _buildingRepository.GetBuildingsForRecipeAsync(selectedRecipe.Id);
+        // Note: Building filtering by milestones should be handled at a higher level
+        var validBuildings = availableBuildings.ToList();
         
-        if (!validMachines.Any())
+        if (!validBuildings.Any())
         {
-            throw new InvalidOperationException($"No machines available for recipe {selectedRecipe.Name} at tier {gameTier}");
+            throw new InvalidOperationException($"No buildings available for recipe {selectedRecipe.Name} at tier {gameTier}");
         }
 
-        var selectedMachine = SelectBestMachine(validMachines, options);
+        var selectedBuilding = SelectBestBuilding(validBuildings, options);
 
         // Create the production node
         var node = new ProductionNode
         {
             Recipe = selectedRecipe,
-            Machine = selectedMachine,
+            Building = selectedBuilding,
             TargetProductionRate = targetOutput.QuantityPerMinute
         };
 
-        // Calculate required machine count
+        // Calculate required building count
         var primaryOutput = selectedRecipe.Outputs.First(o => o.Item.Id == targetOutput.Item.Id);
         var baseProductionRate = (primaryOutput.Quantity * 60.0) / selectedRecipe.ProductionTimeSeconds;
-        var adjustedRate = baseProductionRate * selectedMachine.ProductionSpeed;
+        var adjustedRate = baseProductionRate * selectedBuilding.ProductionSpeed;
         
-        node.MachineCount = Math.Ceiling(targetOutput.QuantityPerMinute / adjustedRate);
+        node.BuildingCount = Math.Ceiling(targetOutput.QuantityPerMinute / adjustedRate);
 
         // Build input chains recursively
         foreach (var input in selectedRecipe.Inputs)
         {
-            var requiredInputRate = (input.Quantity * 60.0 / selectedRecipe.ProductionTimeSeconds) * node.MachineCount;
+            var requiredInputRate = (input.Quantity * 60.0 / selectedRecipe.ProductionTimeSeconds) * node.BuildingCount;
             var inputTarget = new ItemQuantity(input.Item, requiredInputRate) { QuantityPerMinute = requiredInputRate };
             
             var inputNode = await BuildProductionChainAsync(inputTarget, gameTier, options, graph);
@@ -198,37 +199,37 @@ public class ProductionGraphBuilder
 
         var selectedRecipe = SelectBestRecipe(validRecipes, options);
         
-        // Find the best machine for this recipe
-        var availableMachines = await _machineRepository.GetMachinesForRecipeAsync(selectedRecipe.Id);
-        // Note: Machine filtering by milestones should be handled at a higher level
-        var validMachines = availableMachines.ToList();
+        // Find the best building for this recipe
+        var availableBuildings = await _buildingRepository.GetBuildingsForRecipeAsync(selectedRecipe.Id);
+        // Note: Building filtering by milestones should be handled at a higher level
+        var validBuildings = availableBuildings.ToList();
         
-        if (!validMachines.Any())
+        if (!validBuildings.Any())
         {
-            throw new InvalidOperationException($"No machines available for recipe {selectedRecipe.Name} at tier {playerState.CurrentTier}");
+            throw new InvalidOperationException($"No buildings available for recipe {selectedRecipe.Name} at tier {playerState.CurrentTier}");
         }
 
-        var selectedMachine = SelectBestMachine(validMachines, options);
+        var selectedBuilding = SelectBestBuilding(validBuildings, options);
 
         // Create the production node
         var node = new ProductionNode
         {
             Recipe = selectedRecipe,
-            Machine = selectedMachine,
+            Building = selectedBuilding,
             TargetProductionRate = targetOutput.QuantityPerMinute
         };
 
-        // Calculate required machine count
+        // Calculate required building count
         var primaryOutput = selectedRecipe.Outputs.First(o => o.Item.Id == targetOutput.Item.Id);
         var baseProductionRate = (primaryOutput.Quantity * 60.0) / selectedRecipe.ProductionTimeSeconds;
-        var adjustedRate = baseProductionRate * selectedMachine.ProductionSpeed;
+        var adjustedRate = baseProductionRate * selectedBuilding.ProductionSpeed;
         
-        node.MachineCount = Math.Ceiling(targetOutput.QuantityPerMinute / adjustedRate);
+        node.BuildingCount = Math.Ceiling(targetOutput.QuantityPerMinute / adjustedRate);
 
         // Build input chains recursively
         foreach (var input in selectedRecipe.Inputs)
         {
-            var requiredInputRate = (input.Quantity * 60.0 / selectedRecipe.ProductionTimeSeconds) * node.MachineCount;
+            var requiredInputRate = (input.Quantity * 60.0 / selectedRecipe.ProductionTimeSeconds) * node.BuildingCount;
             var inputTarget = new ItemQuantity(input.Item, requiredInputRate) { QuantityPerMinute = requiredInputRate };
             
             var inputNode = await BuildProductionChainAsync(inputTarget, playerState, options, graph);
@@ -291,8 +292,9 @@ public class ProductionGraphBuilder
     }
 
     /// <summary>
-    /// Selects the best machine based on the optimization options
+    /// Selects the best machine based on the optimization options (obsolete - use SelectBestBuilding)
     /// </summary>
+    [Obsolete("Use SelectBestBuilding instead of SelectBestMachine to align with wiki terminology")]
     private Machine SelectBestMachine(List<Machine> machines, ProductionGraphOptions options)
     {
         return options.OptimizeFor switch
@@ -301,6 +303,20 @@ public class ProductionGraphBuilder
             OptimizationTarget.Speed => machines.OrderByDescending(m => m.ProductionSpeed).First(),
             OptimizationTarget.Simplicity => machines.OrderBy(m => m.PowerConsumption).First(),
             _ => machines.First()
+        };
+    }
+
+    /// <summary>
+    /// Selects the best building based on the optimization options
+    /// </summary>
+    private Building SelectBestBuilding(List<Building> buildings, ProductionGraphOptions options)
+    {
+        return options.OptimizeFor switch
+        {
+            OptimizationTarget.PowerEfficiency => buildings.OrderBy(b => b.PowerConsumption / b.ProductionSpeed).First(),
+            OptimizationTarget.Speed => buildings.OrderByDescending(b => b.ProductionSpeed).First(),
+            OptimizationTarget.Simplicity => buildings.OrderBy(b => b.PowerConsumption).First(),
+            _ => buildings.First()
         };
     }
 
@@ -324,9 +340,9 @@ public class ProductionGraphBuilder
 
     private void MergeDuplicateNodes(ProductionGraph graph)
     {
-        // Group nodes by recipe and machine type
+        // Group nodes by recipe and building type
         var nodeGroups = graph.Nodes
-            .GroupBy(n => new { RecipeId = n.Recipe.Id, MachineId = n.Machine.Id })
+            .GroupBy(n => new { RecipeId = n.Recipe.Id, BuildingId = n.Building.Id })
             .Where(g => g.Count() > 1);
 
         foreach (var group in nodeGroups)
@@ -334,8 +350,8 @@ public class ProductionGraphBuilder
             var primaryNode = group.First();
             var duplicateNodes = group.Skip(1).ToList();
 
-            // Merge machine counts
-            primaryNode.MachineCount += duplicateNodes.Sum(n => n.MachineCount);
+            // Merge building counts
+            primaryNode.BuildingCount += duplicateNodes.Sum(n => n.BuildingCount);
             
             // Update connections
             foreach (var duplicate in duplicateNodes)
@@ -371,17 +387,17 @@ public class ProductionGraphBuilder
                     foreach (var requiredInput in requiredInputItems)
                     {
                         var requiredRate = (requiredInput.Quantity * 60.0 / node.Recipe.ProductionTimeSeconds) 
-                                         * node.MachineCount * node.ClockSpeed;
+                                         * node.BuildingCount * node.ClockSpeed;
                         
                         var outputFromInput = inputNode.Recipe.Outputs
                             .First(o => o.Item.Id == requiredInput.Item.Id);
                         var currentRate = (outputFromInput.Quantity * 60.0 / inputNode.Recipe.ProductionTimeSeconds) 
-                                        * inputNode.MachineCount * inputNode.ClockSpeed;
+                                        * inputNode.BuildingCount * inputNode.ClockSpeed;
                         
                         if (currentRate < requiredRate)
                         {
                             var scaleFactor = requiredRate / currentRate;
-                            inputNode.MachineCount *= scaleFactor;
+                            inputNode.BuildingCount *= scaleFactor;
                         }
                     }
                 }
@@ -391,18 +407,18 @@ public class ProductionGraphBuilder
 
     private void OptimizeOverclocking(ProductionGraph graph, ProductionGraphOptions options)
     {
-        foreach (var node in graph.Nodes.Where(n => n.Machine.CanOverclock))
+        foreach (var node in graph.Nodes.Where(n => n.Building.CanOverclock))
         {
-            // Try to reduce machine count by overclocking
+            // Try to reduce building count by overclocking
             var maxOverclock = options.MaxOverclockPercentage / 100.0;
             var potentialClockSpeed = Math.Min(maxOverclock, 2.5); // Game limit is 250%
             
-            var newMachineCount = node.MachineCount / potentialClockSpeed;
+            var newBuildingCount = node.BuildingCount / potentialClockSpeed;
             
-            // Only overclock if it results in fewer machines
-            if (Math.Ceiling(newMachineCount) < Math.Ceiling(node.MachineCount))
+            // Only overclock if it results in fewer buildings
+            if (Math.Ceiling(newBuildingCount) < Math.Ceiling(node.BuildingCount))
             {
-                node.MachineCount = Math.Ceiling(newMachineCount);
+                node.BuildingCount = Math.Ceiling(newBuildingCount);
                 node.ClockSpeed = potentialClockSpeed;
             }
         }

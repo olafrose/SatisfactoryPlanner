@@ -1,0 +1,219 @@
+[
+  {
+    "id": "iron_ore",
+    "name": "Iron Ore",
+    "description": "Used for smelting into Iron Ingots",
+    "category": "RawResource",
+    "isRawResource": true
+  },
+  {
+    "id": "copper_ore",
+    "name": "Copper Ore",
+    "description": "Used for smelting into Copper Ingots",
+    "category": "RawResource",
+    "isRawResource": true
+  },
+  {
+    "id": "limestone",
+    "name": "Limestone",
+    "description": "Used for creating Concrete",
+    "category": "RawResource",
+    "isRawResource": true
+  },
+  {
+    "id": "coal",
+    "name": "Coal",
+    "description": "Used for power generation and steel production",
+    "category": "RawResource",
+    "isRawResource": true
+  },
+  {
+    "id": "iron_ingot",
+    "name": "Iron Ingot",
+    "description": "Refined iron for crafting",
+    "category": "Ingot",
+    "isRawResource": false
+  },
+  {
+    "id": "copper_ingot",
+    "name": "Copper Ingot",
+    "description": "Refined copper for crafting",
+    "category": "Ingot",
+    "isRawResource": false
+  },
+  {
+    "id": "iron_plate",
+    "name": "Iron Plate",
+    "description": "Basic iron construction component",
+    "category": "BasicPart",
+    "isRawResource": false
+  },
+  {
+    "id": "iron_rod",
+    "name": "Iron Rod",
+    "description": "Basic iron construction component",
+    "category": "BasicPart",
+    "isRawResource": false
+  },
+  {
+    "id": "screw",
+    "name": "Screw",
+    "description": "Basic fastening component",
+    "category": "BasicPart",
+    "isRawResource": false
+  },
+  {
+    "id": "wire",
+    "name": "Wire",
+    "description": "Basic electrical component",
+    "category": "BasicPart",
+    "isRawResource": false
+  },
+  {
+    "id": "cable",
+    "name": "Cable",
+    "description": "Electrical transmission component",
+    "category": "BasicPart",
+    "isRawResource": false
+  },
+  {
+    "id": "concrete",
+    "name": "Concrete",
+    "description": "Basic construction material",
+    "category": "BasicPart",
+    "isRawResource": false
+  },
+  {
+    "id": "reinforced_iron_plate",
+    "name": "Reinforced Iron Plate",
+    "description": "Strengthened iron plate for advanced construction",
+    "category": "IntermediatePart",
+    "isRawResource": false
+  },
+  {
+    "id": "rotor",
+    "name": "Rotor",
+    "description": "Rotating component for machines",
+    "category": "IntermediatePart",
+    "isRawResource": false
+  },
+  {
+    "id": "modular_frame",
+    "name": "Modular Frame",
+    "description": "Structural component for complex machinery",
+    "category": "IntermediatePart",
+    "isRawResource": false
+  },
+  {
+    "id": "motor",
+    "name": "Motor",
+    "description": "Motorized component for advanced machinery",
+    "category": "AdvancedPart",
+    "isRawResource": false
+  },
+  {
+    "id": "computer",
+    "name": "Computer",
+    "description": "Advanced computational component",
+    "category": "AdvancedPart",
+    "isRawResource": false
+  },
+  {
+    "id": "smart_plating",
+    "name": "Smart Plating",
+    "description": "Space Elevator construction component",
+    "category": "SpaceElevator",
+    "isRawResource": false
+  },
+  {
+    "id": "versatile_framework",
+    "name": "Versatile Framework",
+    "description": "Space Elevator construction component",
+    "category": "SpaceElevator",
+    "isRawResource": false
+  },
+  {
+    "id": "modular_engine",
+    "name": "Modular Engine",
+    "description": "Space Elevator construction component",
+    "category": "SpaceElevator",
+    "isRawResource": false
+  },
+  {
+    "id": "equipment_workshop",
+    "name": "Equipment Workshop",
+    "description": "Building for crafting equipment and tools",
+    "category": "Building",
+    "isRawResource": false
+  },
+  {
+    "id": "portable_miner",
+    "name": "Portable Miner",
+    "description": "Handheld resource extraction tool",
+    "category": "Equipment",
+    "isRawResource": false
+  },
+  {
+    "id": "biomass",
+    "name": "Biomass",
+    "description": "Organic fuel material",
+    "category": "Fuel",
+    "isRawResource": false
+  },
+  {
+    "id": "copper_sheet",
+    "name": "Copper Sheet",
+    "description": "Flattened copper for construction",
+    "category": "BasicPart",
+    "isRawResource": false
+  },
+  {
+    "id": "solid_biofuel",
+    "name": "Solid Biofuel",
+    "description": "Compressed biomass fuel",
+    "category": "Fuel",
+    "isRawResource": false
+  },
+  {
+    "id": "steel_ingot",
+    "name": "Steel Ingot",
+    "description": "Refined steel for advanced construction",
+    "category": "Ingot",
+    "isRawResource": false
+  },
+  {
+    "id": "steel_beam",
+    "name": "Steel Beam",
+    "description": "Structural steel component",
+    "category": "IntermediatePart",
+    "isRawResource": false
+  },
+  {
+    "id": "steel_pipe",
+    "name": "Steel Pipe",
+    "description": "Steel piping for construction",
+    "category": "IntermediatePart",
+    "isRawResource": false
+  },
+  {
+    "id": "encased_industrial_beam",
+    "name": "Encased Industrial Beam",
+    "description": "Heavy-duty structural component",
+    "category": "IntermediatePart",
+    "isRawResource": false
+  },
+  {
+    "id": "stator",
+    "name": "Stator",
+    "description": "Electromagnetic component for motors",
+    "category": "IntermediatePart",
+    "isRawResource": false
+  },
+  {
+    "id": "automated_wiring",
+    "name": "Automated Wiring",
+    "description": "Space Elevator construction component",
+    "category": "SpaceElevator",
+    "isRawResource": false
+  }
+]

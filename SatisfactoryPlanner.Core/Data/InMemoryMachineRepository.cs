@@ -1,76 +1,46 @@
-using SatisfactoryPlanner.Core.Models;
 using SatisfactoryPlanner.Core.Services;
+using SatisfactoryPlanner.GameData;
+using SatisfactoryPlanner.GameData.Models;
 
 namespace SatisfactoryPlanner.Core.Data;
 
 /// <summary>
-/// In-memory implementation of machine repository that loads from JSON data
+/// In-memory implementation of machine repository that loads from JSON data (deprecated - use InMemoryBuildingRepository)
 /// </summary>
-public class InMemoryMachineRepository : IMachineRepository
+[Obsolete("Use InMemoryBuildingRepository instead of InMemoryMachineRepository to align with wiki terminology")]
+public class InMemoryMachineRepository : InMemoryBuildingRepository, IMachineRepository
 {
-    private readonly MachineLoader _machineLoader;
-    private List<Machine>? _machines;
-
-    public InMemoryMachineRepository(MachineLoader machineLoader)
+    public InMemoryMachineRepository(GameDataService gameDataService) : base(gameDataService)
     {
-        _machineLoader = machineLoader;
-    }
-
-    public InMemoryMachineRepository(string dataFilePath)
-    {
-        _machineLoader = new MachineLoader(dataFilePath);
-    }
-
-    private async Task EnsureDataLoadedAsync()
-    {
-        if (_machines == null)
-        {
-            _machines = await _machineLoader.LoadMachinesAsync();
-        }
     }
 
     public async Task<List<Machine>> GetAllMachinesAsync()
     {
-        await EnsureDataLoadedAsync();
-        return _machines!;
+        var buildings = await GetAllBuildingsAsync();
+        return buildings.Cast<Machine>().ToList();
     }
 
     public async Task<Machine?> GetMachineByIdAsync(string id)
     {
-        await EnsureDataLoadedAsync();
-        return _machines!.FirstOrDefault(m => m.Id == id);
+        var building = await GetBuildingByIdAsync(id);
+        return building as Machine;
     }
 
     public async Task<List<Machine>> GetMachinesForRecipeAsync(string recipeId)
     {
-        await EnsureDataLoadedAsync();
-        // Enhanced mapping logic that handles alternate recipes
-        return _machines!.Where(m => 
-            // Smelter recipes (ingots)
-            (recipeId.Contains("ingot") && m.Type == MachineType.Smelter) ||
-            
-            // Constructor recipes (basic parts)
-            ((recipeId.Contains("plate") || recipeId.Contains("rod") || recipeId.Contains("screw") || 
-              recipeId.Contains("wire") || recipeId.Contains("cable") || recipeId.Contains("concrete") ||
-              recipeId.Contains("cast") || recipeId.Contains("fused")) && m.Type == MachineType.Constructor) ||
-            
-            // Assembler recipes (complex parts)
-            ((recipeId.Contains("reinforced") || recipeId.Contains("rotor") || recipeId.Contains("frame") || 
-              recipeId.Contains("smart_plating") || recipeId.Contains("adhered")) && m.Type == MachineType.Assembler)
-        ).ToList();
+        var buildings = await GetBuildingsForRecipeAsync(recipeId);
+        return buildings.Cast<Machine>().ToList();
     }
 
     public async Task<List<Machine>> GetMachinesByTypeAsync(MachineType type)
     {
-        await EnsureDataLoadedAsync();
-        return _machines!.Where(m => m.Type == type).ToList();
+        var buildings = await GetBuildingsByTypeAsync((BuildingType)type);
+        return buildings.Cast<Machine>().ToList();
     }
 
     public async Task<List<Machine>> GetMachinesByTierAsync(int maxTier)
     {
-        await EnsureDataLoadedAsync();
-        // Since machines are now unlocked by milestones, return all machines
-        // Milestone filtering should happen at a higher level
-        return _machines!.ToList();
+        var buildings = await GetBuildingsByTierAsync(maxTier);
+        return buildings.Cast<Machine>().ToList();
     }
 }

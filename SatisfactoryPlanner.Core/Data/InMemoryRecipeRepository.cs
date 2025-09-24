@@ -1,5 +1,6 @@
-using SatisfactoryPlanner.Core.Models;
 using SatisfactoryPlanner.Core.Services;
+using SatisfactoryPlanner.GameData;
+using SatisfactoryPlanner.GameData.Models;
 
 namespace SatisfactoryPlanner.Core.Data;
 
@@ -8,24 +9,19 @@ namespace SatisfactoryPlanner.Core.Data;
 /// </summary>
 public class InMemoryRecipeRepository : IRecipeRepository
 {
-    private readonly RecipeLoader _recipeLoader;
+    private readonly GameDataService _gameDataService;
     private List<Recipe>? _recipes;
 
-    public InMemoryRecipeRepository(RecipeLoader recipeLoader)
+    public InMemoryRecipeRepository(GameDataService gameDataService)
     {
-        _recipeLoader = recipeLoader;
-    }
-
-    public InMemoryRecipeRepository(string dataFilePath, ItemLoader itemLoader)
-    {
-        _recipeLoader = new RecipeLoader(dataFilePath, itemLoader);
+        _gameDataService = gameDataService;
     }
 
     private async Task EnsureDataLoadedAsync()
     {
         if (_recipes == null)
         {
-            _recipes = await _recipeLoader.LoadRecipesAsync();
+            _recipes = await _gameDataService.LoadRecipesAsync();
         }
     }
 

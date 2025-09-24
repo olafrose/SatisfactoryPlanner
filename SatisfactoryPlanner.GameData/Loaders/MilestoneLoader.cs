@@ -1,19 +1,20 @@
-using SatisfactoryPlanner.Core.Models;
+using SatisfactoryPlanner.GameData.Models;
 
-namespace SatisfactoryPlanner.Core.Data;
+namespace SatisfactoryPlanner.GameData.Loaders;
 
 /// <summary>
 /// Loads milestones from JSON and converts them to domain models
 /// </summary>
 public class MilestoneLoader
 {
-    private readonly JsonDataLoader<GameDataDto> _jsonLoader;
+    private readonly JsonDataLoader<List<MilestoneDto>> _jsonLoader;
     private readonly ItemLoader _itemLoader;
     private List<Milestone>? _cachedMilestones;
 
-    public MilestoneLoader(string filePath, ItemLoader itemLoader)
+    public MilestoneLoader(string gameDataDirectory, ItemLoader itemLoader)
     {
-        _jsonLoader = new JsonDataLoader<GameDataDto>(filePath);
+        var milestonesFilePath = Path.Combine(gameDataDirectory, "milestones.json");
+        _jsonLoader = new JsonDataLoader<List<MilestoneDto>>(milestonesFilePath);
         _itemLoader = itemLoader;
     }
 
@@ -25,11 +26,20 @@ public class MilestoneLoader
         if (_cachedMilestones != null)
             return _cachedMilestones;
 
-        var gameData = await _jsonLoader.LoadAsync();
+        var milestoneDtos = await _jsonLoader.LoadAsync();
         var itemLookup = await _itemLoader.LoadItemsLookupAsync();
         
-        _cachedMilestones = gameData.Milestones.Select(dto => ConvertToMilestone(dto, itemLookup)).ToList();
+        _cachedMilestones = milestoneDtos.Select(dto => ConvertToMilestone(dto, itemLookup)).ToList();
         return _cachedMilestones;
+    }
+
+    /// <summary>
+    /// Loads milestones and returns them as a lookup dictionary by ID
+    /// </summary>
+    public async Task<Dictionary<string, Milestone>> LoadMilestonesLookupAsync()
+    {
+        var milestones = await LoadMilestonesAsync();
+        return milestones.ToDictionary(m => m.Id, m => m);
     }
 
     private static Milestone ConvertToMilestone(MilestoneDto dto, Dictionary<string, Item> itemLookup)

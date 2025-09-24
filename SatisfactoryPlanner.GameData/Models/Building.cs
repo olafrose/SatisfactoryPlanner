@@ -1,14 +1,14 @@
-namespace SatisfactoryPlanner.Core.Models;
+namespace SatisfactoryPlanner.GameData.Models;
 
 /// <summary>
-/// Represents a production machine in Satisfactory
+/// Represents a production building in Satisfactory
 /// </summary>
-public class Machine
+public class Building
 {
     public string Id { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
-    public MachineType Type { get; set; }
+    public BuildingType Type { get; set; }
     
     /// <summary>
     /// Base production speed multiplier (1.0 = normal speed)
@@ -31,19 +31,19 @@ public class Machine
     public int MaxOutputConnections { get; set; } = 1;
     
     /// <summary>
-    /// Whether this machine can be overclocked
+    /// Whether this building can be overclocked
     /// </summary>
     public bool CanOverclock { get; set; } = true;
 
     public override string ToString() => Name;
-    public override bool Equals(object? obj) => obj is Machine machine && Id == machine.Id;
+    public override bool Equals(object? obj) => obj is Building building && Id == building.Id;
     public override int GetHashCode() => Id.GetHashCode();
 }
 
 /// <summary>
-/// Types of production machines in Satisfactory
+/// Types of production buildings in Satisfactory
 /// </summary>
-public enum MachineType
+public enum BuildingType
 {
     Extractor,       // Miners, Oil Extractors, Water Extractors
     Smelter,         // Smelter, Foundry
@@ -56,5 +56,6 @@ public enum MachineType
     ParticleAccelerator, // Particle Accelerator
     Converter,       // Converter
     QuantumEncoder,  // Quantum Encoder
-    Other            // Special or unique machines
+    Workshop,        // Equipment Workshop
+    Other            // Special or unique buildings
 }

@@ -1,4 +1,4 @@
-namespace SatisfactoryPlanner.Core.Data;
+namespace SatisfactoryPlanner.GameData.Loaders;
 
 /// <summary>
 /// Data transfer objects for JSON deserialization

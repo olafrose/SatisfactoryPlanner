@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SatisfactoryPlanner.Core\SatisfactoryPlanner.Core.csproj" />
+    <ProjectReference Include="..\SatisfactoryPlanner.GameData\SatisfactoryPlanner.GameData.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

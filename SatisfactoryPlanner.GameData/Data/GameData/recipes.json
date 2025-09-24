@@ -1,0 +1,588 @@
+[
+  {
+    "id": "iron_ingot",
+    "name": "Iron Ingot",
+    "description": "Smelts Iron Ore into Iron Ingots",
+    "inputs": [
+      {
+        "itemId": "iron_ore",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "itemId": "iron_ingot",
+        "quantity": 1
+      }
+    ],
+    "productionTimeSeconds": 2.0,
+    "compatibleMachineIds": [
+      "smelter"
+    ],
+    "isAlternate": false
+  },
+  {
+    "id": "iron_plate",
+    "name": "Iron Plate",
+    "description": "Constructs Iron Plates from Iron Ingots",
+    "inputs": [
+      {
+        "itemId": "iron_ingot",
+        "quantity": 3
+      }
+    ],
+    "outputs": [
+      {
+        "itemId": "iron_plate",
+        "quantity": 2
+      }
+    ],
+    "productionTimeSeconds": 6.0,
+    "compatibleMachineIds": [
+      "constructor"
+    ],
+    "isAlternate": false
+  },
+  {
+    "id": "iron_rod",
+    "name": "Iron Rod",
+    "description": "Constructs Iron Rods from Iron Ingots",
+    "inputs": [
+      {
+        "itemId": "iron_ingot",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "itemId": "iron_rod",
+        "quantity": 1
+      }
+    ],
+    "productionTimeSeconds": 4.0,
+    "compatibleMachineIds": [
+      "constructor"
+    ],
+    "isAlternate": false
+  },
+  {
+    "id": "reinforced_iron_plate",
+    "name": "Reinforced Iron Plate",
+    "description": "Assembles Reinforced Iron Plates",
+    "inputs": [
+      {
+        "itemId": "iron_plate",
+        "quantity": 6
+      },
+      {
+        "itemId": "screw",
+        "quantity": 12
+      }
+    ],
+    "outputs": [
+      {
+        "itemId": "reinforced_iron_plate",
+        "quantity": 1
+      }
+    ],
+    "productionTimeSeconds": 12.0,
+    "compatibleMachineIds": [
+      "assembler"
+    ],
+    "isAlternate": false
+  },
+  {
+    "id": "screw",
+    "name": "Screw",
+    "description": "Constructs Screws from Iron Rods",
+    "inputs": [
+      {
+        "itemId": "iron_rod",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "itemId": "screw",
+        "quantity": 4
+      }
+    ],
+    "productionTimeSeconds": 6.0,
+    "compatibleMachineIds": [
+      "constructor"
+    ],
+    "isAlternate": false
+  },
+  {
+    "id": "copper_ingot",
+    "name": "Copper Ingot",
+    "description": "Smelts Copper Ore into Copper Ingots",
+    "inputs": [
+      {
+        "itemId": "copper_ore",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "itemId": "copper_ingot",
+        "quantity": 1
+      }
+    ],
+    "productionTimeSeconds": 2.0,
+    "compatibleMachineIds": [
+      "smelter"
+    ],
+    "isAlternate": false
+  },
+  {
+    "id": "wire",
+    "name": "Wire",
+    "description": "Constructs Wire from Copper Ingots",
+    "inputs": [
+      {
+        "itemId": "copper_ingot",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "itemId": "wire",
+        "quantity": 2
+      }
+    ],
+    "productionTimeSeconds": 4.0,
+    "compatibleMachineIds": [
+      "constructor"
+    ],
+    "isAlternate": false
+  },
+  {
+    "id": "cable",
+    "name": "Cable",
+    "description": "Constructs Cables from Wire",
+    "inputs": [
+      {
+        "itemId": "wire",
+        "quantity": 2
+      }
+    ],
+    "outputs": [
+      {
+        "itemId": "cable",
+        "quantity": 1
+      }
+    ],
+    "productionTimeSeconds": 2.0,
+    "compatibleMachineIds": [
+      "constructor"
+    ],
+    "isAlternate": false
+  },
+  {
+    "id": "concrete",
+    "name": "Concrete",
+    "description": "Constructs Concrete from Limestone",
+    "inputs": [
+      {
+        "itemId": "limestone",
+        "quantity": 3
+      }
+    ],
+    "outputs": [
+      {
+        "itemId": "concrete",
+        "quantity": 1
+      }
+    ],
+    "productionTimeSeconds": 4.0,
+    "compatibleMachineIds": [
+      "constructor"
+    ],
+    "isAlternate": false
+  },
+  {
+    "id": "rotor",
+    "name": "Rotor",
+    "description": "Assembles Rotors",
+    "inputs": [
+      {
+        "itemId": "iron_rod",
+        "quantity": 5
+      },
+      {
+        "itemId": "screw",
+        "quantity": 25
+      }
+    ],
+    "outputs": [
+      {
+        "itemId": "rotor",
+        "quantity": 1
+      }
+    ],
+    "productionTimeSeconds": 15.0,
+    "compatibleMachineIds": [
+      "assembler"
+    ],
+    "isAlternate": false
+  },
+  {
+    "id": "modular_frame",
+    "name": "Modular Frame",
+    "description": "Assembles Modular Frames",
+    "inputs": [
+      {
+        "itemId": "reinforced_iron_plate",
+        "quantity": 3
+      },
+      {
+        "itemId": "iron_rod",
+        "quantity": 12
+      }
+    ],
+    "outputs": [
+      {
+        "itemId": "modular_frame",
+        "quantity": 2
+      }
+    ],
+    "productionTimeSeconds": 60.0,
+    "compatibleMachineIds": [
+      "assembler"
+    ],
+    "isAlternate": false
+  },
+  {
+    "id": "smart_plating",
+    "name": "Smart Plating",
+    "description": "Space Elevator Part",
+    "inputs": [
+      {
+        "itemId": "reinforced_iron_plate",
+        "quantity": 1
+      },
+      {
+        "itemId": "rotor",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "itemId": "smart_plating",
+        "quantity": 1
+      }
+    ],
+    "productionTimeSeconds": 30.0,
+    "compatibleMachineIds": [
+      "assembler"
+    ],
+    "isAlternate": false
+  },
+  {
+    "id": "iron_plate_alternate_cast",
+    "name": "Cast Iron Plate",
+    "description": "Alternative recipe using Iron Ingot more efficiently",
+    "inputs": [
+      {
+        "itemId": "iron_ingot",
+        "quantity": 5
+      }
+    ],
+    "outputs": [
+      {
+        "itemId": "iron_plate",
+        "quantity": 4
+      }
+    ],
+    "productionTimeSeconds": 8.0,
+    "compatibleMachineIds": [
+      "constructor"
+    ],
+    "isAlternate": true
+  },
+  {
+    "id": "screw_alternate_cast",
+    "name": "Cast Screw",
+    "description": "Alternative recipe producing more screws",
+    "inputs": [
+      {
+        "itemId": "iron_ingot",
+        "quantity": 5
+      }
+    ],
+    "outputs": [
+      {
+        "itemId": "screw",
+        "quantity": 20
+      }
+    ],
+    "productionTimeSeconds": 24.0,
+    "compatibleMachineIds": [
+      "constructor"
+    ],
+    "isAlternate": true
+  },
+  {
+    "id": "reinforced_iron_plate_alternate_adhered",
+    "name": "Adhered Iron Plate",
+    "description": "Alternative recipe using fewer screws",
+    "inputs": [
+      {
+        "itemId": "iron_plate",
+        "quantity": 3
+      },
+      {
+        "itemId": "cable",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "itemId": "reinforced_iron_plate",
+        "quantity": 1
+      }
+    ],
+    "productionTimeSeconds": 16.0,
+    "compatibleMachineIds": [
+      "assembler"
+    ],
+    "isAlternate": true
+  },
+  {
+    "id": "wire_alternate_fused",
+    "name": "Fused Wire",
+    "description": "Alternative recipe for faster wire production",
+    "inputs": [
+      {
+        "itemId": "copper_ingot",
+        "quantity": 4
+      }
+    ],
+    "outputs": [
+      {
+        "itemId": "wire",
+        "quantity": 30
+      }
+    ],
+    "productionTimeSeconds": 20.0,
+    "compatibleMachineIds": [
+      "constructor"
+    ],
+    "isAlternate": true
+  },
+  {
+    "id": "biomass",
+    "name": "Biomass",
+    "description": "Creates biomass from organic materials",
+    "inputs": [
+      {
+        "itemId": "iron_ore",
+        "quantity": 1
+      }
+    ],
+    "outputs": [
+      {
+        "itemId": "biomass",
+        "quantity": 1
+      }
+    ],
+    "productionTimeSeconds": 5.0,
+    "compatibleMachineIds": [
+      "constructor"
+    ],
+    "isAlternate": false
+  },
+  {
+    "id": "copper_sheet",
+    "name": "Copper Sheet",
+    "description": "Flattens copper ingots into sheets",
+    "inputs": [
+      {
+        "itemId": "copper_ingot",
+        "quantity": 2
+      }
+    ],
+    "outputs": [
+      {
+        "itemId": "copper_sheet",
+        "quantity": 1
+      }
+    ],
+    "productionTimeSeconds": 6.0,
+    "compatibleMachineIds": [
+      "constructor"
+    ],
+    "isAlternate": false
+  },
+  {
+    "id": "solid_biofuel",
+    "name": "Solid Biofuel",
+    "description": "Compresses biomass into solid fuel",
+    "inputs": [
+      {
+        "itemId": "biomass",
+        "quantity": 8
+      }
+    ],
+    "outputs": [
+      {
+        "itemId": "solid_biofuel",
+        "quantity": 4
+      }
+    ],
+    "productionTimeSeconds": 4.0,
+    "compatibleMachineIds": [
+      "constructor"
+    ],
+    "isAlternate": false
+  },
+  {
+    "id": "steel_ingot",
+    "name": "Steel Ingot",
+    "description": "Smelts iron ore and coal into steel",
+    "inputs": [
+      {
+        "itemId": "iron_ore",
+        "quantity": 3
+      },
+      {
+        "itemId": "coal",
+        "quantity": 3
+      }
+    ],
+    "outputs": [
+      {
+        "itemId": "steel_ingot",
+        "quantity": 3
+      }
+    ],
+    "productionTimeSeconds": 4.0,
+    "compatibleMachineIds": [
+      "foundry"
+    ],
+    "isAlternate": false
+  },
+  {
+    "id": "steel_beam",
+    "name": "Steel Beam",
+    "description": "Creates steel beams from steel ingots",
+    "inputs": [
+      {
+        "itemId": "steel_ingot",
+        "quantity": 4
+      }
+    ],
+    "outputs": [
+      {
+        "itemId": "steel_beam",
+        "quantity": 1
+      }
+    ],
+    "productionTimeSeconds": 4.0,
+    "compatibleMachineIds": [
+      "constructor"
+    ],
+    "isAlternate": false
+  },
+  {
+    "id": "steel_pipe",
+    "name": "Steel Pipe",
+    "description": "Creates steel pipes from steel ingots",
+    "inputs": [
+      {
+        "itemId": "steel_ingot",
+        "quantity": 3
+      }
+    ],
+    "outputs": [
+      {
+        "itemId": "steel_pipe",
+        "quantity": 2
+      }
+    ],
+    "productionTimeSeconds": 6.0,
+    "compatibleMachineIds": [
+      "constructor"
+    ],
+    "isAlternate": false
+  },
+  {
+    "id": "encased_industrial_beam",
+    "name": "Encased Industrial Beam",
+    "description": "Assembles encased industrial beams",
+    "inputs": [
+      {
+        "itemId": "steel_beam",
+        "quantity": 4
+      },
+      {
+        "itemId": "concrete",
+        "quantity": 5
+      }
+    ],
+    "outputs": [
+      {
+        "itemId": "encased_industrial_beam",
+        "quantity": 1
+      }
+    ],
+    "productionTimeSeconds": 10.0,
+    "compatibleMachineIds": [
+      "assembler"
+    ],
+    "isAlternate": false
+  },
+  {
+    "id": "stator",
+    "name": "Stator",
+    "description": "Assembles Stators from Steel Pipe and Wire",
+    "inputs": [
+      {
+        "itemId": "steel_pipe",
+        "quantity": 3
+      },
+      {
+        "itemId": "wire",
+        "quantity": 8
+      }
+    ],
+    "outputs": [
+      {
+        "itemId": "stator",
+        "quantity": 1
+      }
+    ],
+    "productionTimeSeconds": 12.0,
+    "compatibleMachineIds": [
+      "assembler"
+    ],
+    "isAlternate": false
+  },
+  {
+    "id": "automated_wiring",
+    "name": "Automated Wiring",
+    "description": "Assembles Automated Wiring from Stator and Cable",
+    "inputs": [
+      {
+        "itemId": "stator",
+        "quantity": 1
+      },
+      {
+        "itemId": "cable",
+        "quantity": 20
+      }
+    ],
+    "outputs": [
+      {
+        "itemId": "automated_wiring",
+        "quantity": 1
+      }
+    ],
+    "productionTimeSeconds": 24.0,
+    "compatibleMachineIds": [
+      "assembler"
+    ],
+    "isAlternate": false
+  }
+]

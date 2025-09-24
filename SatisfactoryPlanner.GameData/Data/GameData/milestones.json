@@ -1,0 +1,710 @@
+[
+  {
+    "id": "onboarding",
+    "name": "Onboarding",
+    "description": "Basic crafting recipes available from the start",
+    "tier": 0,
+    "unlockedRecipeIds": [
+      "iron_ingot",
+      "iron_plate",
+      "iron_rod"
+    ],
+    "unlockedMachineIds": [],
+    "isRequired": true,
+    "prerequisiteMilestoneIds": [],
+    "cost": []
+  },
+  {
+    "id": "hub_upgrade_1",
+    "name": "HUB Upgrade 1",
+    "description": "The Equipment Workshop",
+    "tier": 0,
+    "unlockedRecipeIds": [],
+    "unlockedMachineIds": [
+      "equipment_workshop"
+    ],
+    "isRequired": true,
+    "prerequisiteMilestoneIds": [
+      "onboarding"
+    ],
+    "cost": [
+      {
+        "itemId": "iron_rod",
+        "quantity": 10
+      }
+    ]
+  },
+  {
+    "id": "hub_upgrade_2",
+    "name": "HUB Upgrade 2",
+    "description": "Smelter, Power Line, and basic recipes",
+    "tier": 0,
+    "unlockedRecipeIds": [
+      "copper_ingot",
+      "wire",
+      "cable"
+    ],
+    "unlockedMachineIds": [
+      "smelter"
+    ],
+    "isRequired": true,
+    "prerequisiteMilestoneIds": [
+      "hub_upgrade_1"
+    ],
+    "cost": [
+      {
+        "itemId": "iron_rod",
+        "quantity": 20
+      },
+      {
+        "itemId": "iron_plate",
+        "quantity": 10
+      }
+    ]
+  },
+  {
+    "id": "hub_upgrade_3",
+    "name": "HUB Upgrade 3",
+    "description": "Constructor, Power Pole, and construction recipes",
+    "tier": 0,
+    "unlockedRecipeIds": [
+      "concrete",
+      "screw",
+      "reinforced_iron_plate"
+    ],
+    "unlockedMachineIds": [
+      "constructor"
+    ],
+    "isRequired": true,
+    "prerequisiteMilestoneIds": [
+      "hub_upgrade_2"
+    ],
+    "cost": [
+      {
+        "itemId": "iron_plate",
+        "quantity": 20
+      },
+      {
+        "itemId": "iron_rod",
+        "quantity": 20
+      },
+      {
+        "itemId": "wire",
+        "quantity": 20
+      }
+    ]
+  },
+  {
+    "id": "hub_upgrade_4",
+    "name": "HUB Upgrade 4",
+    "description": "Conveyor Belt, Conveyor Pole, and logistics",
+    "tier": 0,
+    "unlockedRecipeIds": [],
+    "unlockedMachineIds": [],
+    "isRequired": true,
+    "prerequisiteMilestoneIds": [
+      "hub_upgrade_3"
+    ],
+    "cost": [
+      {
+        "itemId": "iron_plate",
+        "quantity": 75
+      },
+      {
+        "itemId": "cable",
+        "quantity": 20
+      },
+      {
+        "itemId": "concrete",
+        "quantity": 10
+      }
+    ]
+  },
+  {
+    "id": "hub_upgrade_5",
+    "name": "HUB Upgrade 5",
+    "description": "Miner Mk.1, Storage Container",
+    "tier": 0,
+    "unlockedRecipeIds": [],
+    "unlockedMachineIds": [
+      "miner_mk1"
+    ],
+    "isRequired": true,
+    "prerequisiteMilestoneIds": [
+      "hub_upgrade_4"
+    ],
+    "cost": [
+      {
+        "itemId": "iron_rod",
+        "quantity": 75
+      },
+      {
+        "itemId": "cable",
+        "quantity": 50
+      },
+      {
+        "itemId": "concrete",
+        "quantity": 20
+      }
+    ]
+  },
+  {
+    "id": "hub_upgrade_6",
+    "name": "HUB Upgrade 6",
+    "description": "Space Elevator, Biomass Burner",
+    "tier": 0,
+    "unlockedRecipeIds": [
+      "biomass"
+    ],
+    "unlockedMachineIds": [],
+    "isRequired": true,
+    "prerequisiteMilestoneIds": [
+      "hub_upgrade_5"
+    ],
+    "cost": [
+      {
+        "itemId": "iron_rod",
+        "quantity": 100
+      },
+      {
+        "itemId": "iron_plate",
+        "quantity": 100
+      },
+      {
+        "itemId": "wire",
+        "quantity": 100
+      },
+      {
+        "itemId": "concrete",
+        "quantity": 50
+      }
+    ]
+  },
+  {
+    "id": "base_building",
+    "name": "Base Building",
+    "description": "Foundations, walls, ramps, and structural building components",
+    "tier": 1,
+    "unlockedRecipeIds": [],
+    "unlockedMachineIds": [],
+    "isRequired": true,
+    "prerequisiteMilestoneIds": [
+      "hub_upgrade_6"
+    ],
+    "cost": [
+      {
+        "itemId": "concrete",
+        "quantity": 200
+      },
+      {
+        "itemId": "iron_plate",
+        "quantity": 100
+      },
+      {
+        "itemId": "iron_rod",
+        "quantity": 100
+      }
+    ]
+  },
+  {
+    "id": "logistics_mk1",
+    "name": "Logistics",
+    "description": "Conveyor Splitter, Merger, Lift, and productivity display",
+    "tier": 1,
+    "unlockedRecipeIds": [],
+    "unlockedMachineIds": [],
+    "isRequired": true,
+    "prerequisiteMilestoneIds": [
+      "hub_upgrade_6"
+    ],
+    "cost": [
+      {
+        "itemId": "iron_plate",
+        "quantity": 150
+      },
+      {
+        "itemId": "iron_rod",
+        "quantity": 150
+      },
+      {
+        "itemId": "wire",
+        "quantity": 300
+      }
+    ]
+  },
+  {
+    "id": "field_research",
+    "name": "Field Research",
+    "description": "MAM, Personal Storage Box, Object Scanner, Map",
+    "tier": 1,
+    "unlockedRecipeIds": [],
+    "unlockedMachineIds": [],
+    "isRequired": false,
+    "prerequisiteMilestoneIds": [
+      "hub_upgrade_6"
+    ],
+    "cost": [
+      {
+        "itemId": "wire",
+        "quantity": 300
+      },
+      {
+        "itemId": "screw",
+        "quantity": 300
+      },
+      {
+        "itemId": "iron_plate",
+        "quantity": 100
+      }
+    ]
+  },
+  {
+    "id": "part_assembly",
+    "name": "Part Assembly",
+    "description": "Unlock the Assembler and advanced part recipes",
+    "tier": 2,
+    "unlockedRecipeIds": [
+      "copper_sheet",
+      "rotor",
+      "modular_frame",
+      "smart_plating"
+    ],
+    "unlockedMachineIds": [
+      "assembler"
+    ],
+    "isRequired": true,
+    "prerequisiteMilestoneIds": [
+      "hub_upgrade_6"
+    ],
+    "cost": [
+      {
+        "itemId": "cable",
+        "quantity": 200
+      },
+      {
+        "itemId": "iron_rod",
+        "quantity": 200
+      },
+      {
+        "itemId": "screw",
+        "quantity": 500
+      },
+      {
+        "itemId": "iron_plate",
+        "quantity": 300
+      }
+    ]
+  },
+  {
+    "id": "obstacle_clearing",
+    "name": "Obstacle Clearing",
+    "description": "Chainsaw and solid biofuel for clearing obstacles",
+    "tier": 2,
+    "unlockedRecipeIds": [
+      "solid_biofuel"
+    ],
+    "unlockedMachineIds": [],
+    "isRequired": false,
+    "prerequisiteMilestoneIds": [
+      "hub_upgrade_6"
+    ],
+    "cost": [
+      {
+        "itemId": "screw",
+        "quantity": 500
+      },
+      {
+        "itemId": "cable",
+        "quantity": 100
+      },
+      {
+        "itemId": "concrete",
+        "quantity": 100
+      }
+    ]
+  },
+  {
+    "id": "jump_pads",
+    "name": "Jump Pads",
+    "description": "Jump Pad and U-Jelly Landing Pad for movement",
+    "tier": 2,
+    "unlockedRecipeIds": [],
+    "unlockedMachineIds": [],
+    "isRequired": false,
+    "prerequisiteMilestoneIds": [
+      "hub_upgrade_6"
+    ],
+    "cost": [
+      {
+        "itemId": "rotor",
+        "quantity": 50
+      },
+      {
+        "itemId": "iron_plate",
+        "quantity": 300
+      },
+      {
+        "itemId": "cable",
+        "quantity": 150
+      }
+    ]
+  },
+  {
+    "id": "resource_sink_bonus",
+    "name": "Resource Sink Bonus Program",
+    "description": "AWESOME Sink, AWESOME Shop, and Build Gun Customizer",
+    "tier": 2,
+    "unlockedRecipeIds": [],
+    "unlockedMachineIds": [],
+    "isRequired": false,
+    "prerequisiteMilestoneIds": [
+      "hub_upgrade_6"
+    ],
+    "cost": [
+      {
+        "itemId": "concrete",
+        "quantity": 400
+      },
+      {
+        "itemId": "wire",
+        "quantity": 500
+      },
+      {
+        "itemId": "iron_rod",
+        "quantity": 200
+      },
+      {
+        "itemId": "iron_plate",
+        "quantity": 200
+      }
+    ]
+  },
+  {
+    "id": "logistics_mk2",
+    "name": "Logistics Mk.2",
+    "description": "Enhanced logistics: Conveyor Belt Mk.2, Conveyor Lift Mk.2",
+    "tier": 2,
+    "unlockedRecipeIds": [],
+    "unlockedMachineIds": [],
+    "isRequired": true,
+    "prerequisiteMilestoneIds": [
+      "hub_upgrade_6"
+    ],
+    "cost": [
+      {
+        "itemId": "reinforced_iron_plate",
+        "quantity": 50
+      },
+      {
+        "itemId": "concrete",
+        "quantity": 200
+      },
+      {
+        "itemId": "iron_rod",
+        "quantity": 300
+      },
+      {
+        "itemId": "iron_plate",
+        "quantity": 300
+      }
+    ]
+  },
+  {
+    "id": "space_elevator_phase_1",
+    "name": "Distribution Platform",
+    "description": "Build the Space Elevator and complete its first phase",
+    "tier": 2,
+    "unlockedRecipeIds": [],
+    "unlockedMachineIds": [],
+    "isRequired": true,
+    "prerequisiteMilestoneIds": [
+      "hub_upgrade_6"
+    ],
+    "cost": [
+      {
+        "itemId": "concrete",
+        "quantity": 500
+      },
+      {
+        "itemId": "iron_plate",
+        "quantity": 250
+      },
+      {
+        "itemId": "iron_rod",
+        "quantity": 400
+      },
+      {
+        "itemId": "wire",
+        "quantity": 1500
+      }
+    ]
+  },
+  {
+    "id": "coal_power",
+    "name": "Coal Power",
+    "description": "Coal-Powered Generator, Water Extractor, Pipeline system",
+    "tier": 3,
+    "unlockedRecipeIds": [],
+    "unlockedMachineIds": [],
+    "isRequired": true,
+    "prerequisiteMilestoneIds": [
+      "space_elevator_phase_1"
+    ],
+    "cost": [
+      {
+        "itemId": "reinforced_iron_plate",
+        "quantity": 150
+      },
+      {
+        "itemId": "rotor",
+        "quantity": 50
+      },
+      {
+        "itemId": "cable",
+        "quantity": 500
+      }
+    ]
+  },
+  {
+    "id": "vehicular_transport",
+    "name": "Vehicular Transport",
+    "description": "Truck Station and Tractor for transportation",
+    "tier": 3,
+    "unlockedRecipeIds": [],
+    "unlockedMachineIds": [],
+    "isRequired": false,
+    "prerequisiteMilestoneIds": [
+      "space_elevator_phase_1"
+    ],
+    "cost": [
+      {
+        "itemId": "modular_frame",
+        "quantity": 25
+      },
+      {
+        "itemId": "rotor",
+        "quantity": 100
+      },
+      {
+        "itemId": "cable",
+        "quantity": 200
+      },
+      {
+        "itemId": "iron_plate",
+        "quantity": 400
+      }
+    ]
+  },
+  {
+    "id": "basic_steel_production",
+    "name": "Basic Steel Production",
+    "description": "Foundry and steel production recipes",
+    "tier": 3,
+    "unlockedRecipeIds": [
+      "steel_ingot",
+      "steel_beam",
+      "steel_pipe",
+      "versatile_framework"
+    ],
+    "unlockedMachineIds": [
+      "foundry"
+    ],
+    "isRequired": true,
+    "prerequisiteMilestoneIds": [
+      "space_elevator_phase_1"
+    ],
+    "cost": [
+      {
+        "itemId": "modular_frame",
+        "quantity": 50
+      },
+      {
+        "itemId": "rotor",
+        "quantity": 150
+      },
+      {
+        "itemId": "concrete",
+        "quantity": 500
+      },
+      {
+        "itemId": "wire",
+        "quantity": 1000
+      }
+    ]
+  },
+  {
+    "id": "enhanced_asset_security",
+    "name": "Enhanced Asset Security",
+    "description": "Xeno-Basher equipment and inventory upgrades",
+    "tier": 3,
+    "unlockedRecipeIds": [],
+    "unlockedMachineIds": [],
+    "isRequired": false,
+    "prerequisiteMilestoneIds": [
+      "space_elevator_phase_1"
+    ],
+    "cost": [
+      {
+        "itemId": "reinforced_iron_plate",
+        "quantity": 100
+      },
+      {
+        "itemId": "iron_rod",
+        "quantity": 600
+      },
+      {
+        "itemId": "wire",
+        "quantity": 1500
+      }
+    ]
+  },
+  {
+    "id": "ficsit_blueprints",
+    "name": "FICSIT Blueprints",
+    "description": "Blueprint Designer Mk.1 and Build Gun Blueprints upgrade",
+    "tier": 4,
+    "unlockedRecipeIds": [],
+    "unlockedMachineIds": [],
+    "isRequired": true,
+    "prerequisiteMilestoneIds": [
+      "basic_steel_production"
+    ],
+    "cost": [
+      {
+        "itemId": "modular_frame",
+        "quantity": 100
+      },
+      {
+        "itemId": "steel_beam",
+        "quantity": 200
+      },
+      {
+        "itemId": "cable",
+        "quantity": 500
+      },
+      {
+        "itemId": "concrete",
+        "quantity": 1000
+      }
+    ]
+  },
+  {
+    "id": "logistics_mk3",
+    "name": "Logistics Mk.3",
+    "description": "Industrial Storage, Conveyor Belt Mk.3, Conveyor Lift Mk.3",
+    "tier": 4,
+    "unlockedRecipeIds": [],
+    "unlockedMachineIds": [],
+    "isRequired": true,
+    "prerequisiteMilestoneIds": [
+      "basic_steel_production"
+    ],
+    "cost": [
+      {
+        "itemId": "steel_beam",
+        "quantity": 200
+      },
+      {
+        "itemId": "steel_pipe",
+        "quantity": 200
+      },
+      {
+        "itemId": "reinforced_iron_plate",
+        "quantity": 400
+      }
+    ]
+  },
+  {
+    "id": "advanced_steel_production",
+    "name": "Advanced Steel Production",
+    "description": "Miner Mk.2, Encased Industrial Beam, Stator, Motor, Automated Wiring",
+    "tier": 4,
+    "unlockedRecipeIds": [
+      "encased_industrial_beam",
+      "stator",
+      "motor",
+      "automated_wiring"
+    ],
+    "unlockedMachineIds": [
+      "miner_mk2"
+    ],
+    "isRequired": true,
+    "prerequisiteMilestoneIds": [
+      "logistics_mk3"
+    ],
+    "cost": [
+      {
+        "itemId": "steel_pipe",
+        "quantity": 100
+      },
+      {
+        "itemId": "modular_frame",
+        "quantity": 100
+      },
+      {
+        "itemId": "rotor",
+        "quantity": 200
+      },
+      {
+        "itemId": "concrete",
+        "quantity": 500
+      }
+    ]
+  },
+  {
+    "id": "expanded_power_infrastructure",
+    "name": "Expanded Power Infrastructure",
+    "description": "Power Storage, Power Tower, Power Tower Platform",
+    "tier": 4,
+    "unlockedRecipeIds": [],
+    "unlockedMachineIds": [],
+    "isRequired": false,
+    "prerequisiteMilestoneIds": [
+      "advanced_steel_production"
+    ],
+    "cost": [
+      {
+        "itemId": "encased_industrial_beam",
+        "quantity": 50
+      },
+      {
+        "itemId": "steel_beam",
+        "quantity": 100
+      },
+      {
+        "itemId": "modular_frame",
+        "quantity": 200
+      },
+      {
+        "itemId": "wire",
+        "quantity": 2000
+      }
+    ]
+  },
+  {
+    "id": "hypertubes",
+    "name": "Hypertubes",
+    "description": "Hypertube Entrance, Hypertube, Hypertube Support, Stackable Hypertube Support",
+    "tier": 4,
+    "unlockedRecipeIds": [],
+    "unlockedMachineIds": [],
+    "isRequired": false,
+    "prerequisiteMilestoneIds": [
+      "advanced_steel_production"
+    ],
+    "cost": [
+      {
+        "itemId": "encased_industrial_beam",
+        "quantity": 50
+      },
+      {
+        "itemId": "steel_pipe",
+        "quantity": 300
+      },
+      {
+        "itemId": "copper_sheet",
+        "quantity": 500
+      }
+    ]
+  }
+]

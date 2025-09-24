@@ -1,18 +1,19 @@
-using SatisfactoryPlanner.Core.Models;
+using SatisfactoryPlanner.GameData.Models;
 
-namespace SatisfactoryPlanner.Core.Data;
+namespace SatisfactoryPlanner.GameData.Loaders;
 
 /// <summary>
 /// Loads items from JSON and converts them to domain models
 /// </summary>
 public class ItemLoader
 {
-    private readonly JsonDataLoader<GameDataDto> _jsonLoader;
+    private readonly JsonDataLoader<List<ItemDto>> _jsonLoader;
     private List<Item>? _cachedItems;
 
-    public ItemLoader(string filePath)
+    public ItemLoader(string gameDataDirectory)
     {
-        _jsonLoader = new JsonDataLoader<GameDataDto>(filePath);
+        var itemsFilePath = Path.Combine(gameDataDirectory, "items.json");
+        _jsonLoader = new JsonDataLoader<List<ItemDto>>(itemsFilePath);
     }
 
     /// <summary>
@@ -23,8 +24,8 @@ public class ItemLoader
         if (_cachedItems != null)
             return _cachedItems;
 
-        var gameData = await _jsonLoader.LoadAsync();
-        _cachedItems = gameData.Items.Select(ConvertToItem).ToList();
+        var itemDtos = await _jsonLoader.LoadAsync();
+        _cachedItems = itemDtos.Select(ConvertToItem).ToList();
         return _cachedItems;
     }
 
@@ -39,15 +40,31 @@ public class ItemLoader
 
     private static Item ConvertToItem(ItemDto dto)
     {
-        return new Item
+        var item = new Item
         {
             Id = dto.Id,
             Name = dto.Name,
             Description = dto.Description,
-            Category = Enum.TryParse<ItemCategory>(dto.Category, out var category) ? category : ItemCategory.Other,
             IsRawResource = dto.IsRawResource,
             IconPath = dto.IconPath
         };
+
+        // Parse primary category
+        if (Enum.TryParse<ItemCategory>(dto.Category, out var primaryCategory))
+        {
+            item.PrimaryCategory = primaryCategory;
+            item.AddCategory(primaryCategory); // Also add to Categories collection
+        }
+        else
+        {
+            item.PrimaryCategory = ItemCategory.Other;
+            item.AddCategory(ItemCategory.Other);
+        }
+
+        // TODO: In the future, parse multiple categories from JSON if available
+        // For now, we only have single category data, so we use the primary category
+
+        return item;
     }
 
     /// <summary>

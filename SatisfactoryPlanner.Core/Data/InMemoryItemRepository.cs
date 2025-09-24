@@ -1,5 +1,6 @@
-using SatisfactoryPlanner.Core.Models;
 using SatisfactoryPlanner.Core.Services;
+using SatisfactoryPlanner.GameData;
+using SatisfactoryPlanner.GameData.Models;
 
 namespace SatisfactoryPlanner.Core.Data;
 
@@ -8,24 +9,19 @@ namespace SatisfactoryPlanner.Core.Data;
 /// </summary>
 public class InMemoryItemRepository : IItemRepository
 {
-    private readonly ItemLoader _itemLoader;
+    private readonly GameDataService _gameDataService;
     private List<Item>? _items;
 
-    public InMemoryItemRepository(ItemLoader itemLoader)
+    public InMemoryItemRepository(GameDataService gameDataService)
     {
-        _itemLoader = itemLoader;
-    }
-
-    public InMemoryItemRepository(string dataFilePath)
-    {
-        _itemLoader = new ItemLoader(dataFilePath);
+        _gameDataService = gameDataService;
     }
 
     private async Task EnsureDataLoadedAsync()
     {
         if (_items == null)
         {
-            _items = await _itemLoader.LoadItemsAsync();
+            _items = await _gameDataService.LoadItemsAsync();
         }
     }
 

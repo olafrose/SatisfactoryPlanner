@@ -1,10 +1,17 @@
 using SatisfactoryPlanner.Core;
 using SatisfactoryPlanner.Core.Models;
 using SatisfactoryPlanner.Core.Services;
+using SatisfactoryPlanner.GameData;
+using SatisfactoryPlanner.GameData.Extensions;
 using SatisfactoryPlanner.App;
 
 Console.WriteLine("=== Satisfactory Production Planner with Alternate Recipes ===");
 Console.WriteLine();
+
+// Quick Icon Loading Test
+await TestIconLoading();
+
+Console.WriteLine("\n=== Production Planning ===");
 
 // Initialize the planner service
 var planner = new SatisfactoryPlannerService();
@@ -33,7 +40,7 @@ try
 
     foreach (var node in standardGraph.Nodes.OrderBy(n => n.Recipe.Name))
     {
-        Console.WriteLine($"  • {node.Recipe.Name}: {node.MachineCount:F1}x {node.Machine.Name} ({(node.Recipe.IsAlternate ? "ALT" : "STD")})");
+        Console.WriteLine($"  • {node.Recipe.Name}: {node.BuildingCount:F1}x {node.Building.Name} ({(node.Recipe.IsAlternate ? "ALT" : "STD")})");
     }
     Console.WriteLine();
 
@@ -57,7 +64,7 @@ try
 
     foreach (var node in efficientGraph.Nodes.OrderBy(n => n.Recipe.Name))
     {
-        Console.WriteLine($"  • {node.Recipe.Name}: {node.MachineCount:F1}x {node.Machine.Name} ({(node.Recipe.IsAlternate ? "ALT" : "STD")})");
+        Console.WriteLine($"  • {node.Recipe.Name}: {node.BuildingCount:F1}x {node.Building.Name} ({(node.Recipe.IsAlternate ? "ALT" : "STD")})");
     }
     Console.WriteLine();
 
@@ -114,3 +121,40 @@ catch (Exception ex)
 Console.WriteLine();
 Console.WriteLine("Press any key to exit...");
 Console.ReadKey();
+
+static async Task TestIconLoading()
+{
+    Console.WriteLine("🎨 Testing Icon Loading...");
+    
+    try
+    {
+        // Initialize the game data service
+        var gameDataDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "SatisfactoryPlanner.GameData", "Data", "GameData");
+        gameDataDirectory = Path.GetFullPath(gameDataDirectory);
+        
+        if (!Directory.Exists(gameDataDirectory))
+        {
+            Console.WriteLine($"⚠️ GameData directory not found, skipping icon test");
+            return;
+        }
+
+        var gameDataService = new GameDataService(gameDataDirectory);
+
+        // Test icon service
+        var categories = await gameDataService.Icons.GetCategoriesAsync();
+        Console.WriteLine($"✅ Icon categories available: {string.Join(", ", categories)}");
+
+        // Test specific icons
+        var ironIngotIconPath = await gameDataService.Icons.GetIconPathAsync("Items", "Iron Ingot");
+        Console.WriteLine($"✅ Iron Ingot icon: {(File.Exists(ironIngotIconPath ?? "") ? "Found" : "Not found")}");
+
+        var constructorIconPath = await gameDataService.Icons.GetIconPathAsync("Buildings", "Constructor");
+        Console.WriteLine($"✅ Constructor icon: {(File.Exists(constructorIconPath ?? "") ? "Found" : "Not found")}");
+
+        Console.WriteLine("✅ Icon loading test completed!");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"❌ Icon test error: {ex.Message}");
+    }
+}

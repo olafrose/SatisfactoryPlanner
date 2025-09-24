@@ -1,0 +1,112 @@
+[
+  {
+    "id": "smelter",
+    "name": "Smelter",
+    "description": "Smelts ore into ingots",
+    "type": "Smelter",
+    "productionSpeed": 1.0,
+    "powerConsumption": 4.0,
+    "maxInputConnections": 1,
+    "maxOutputConnections": 1,
+    "canOverclock": true
+  },
+  {
+    "id": "foundry",
+    "name": "Foundry",
+    "description": "Advanced smelting with multiple inputs",
+    "type": "Smelter",
+    "productionSpeed": 1.0,
+    "powerConsumption": 16.0,
+    "maxInputConnections": 2,
+    "maxOutputConnections": 1,
+    "canOverclock": true
+  },
+  {
+    "id": "constructor",
+    "name": "Constructor",
+    "description": "Constructs basic parts from single inputs",
+    "type": "Constructor",
+    "productionSpeed": 1.0,
+    "powerConsumption": 4.0,
+    "maxInputConnections": 1,
+    "maxOutputConnections": 1,
+    "canOverclock": true
+  },
+  {
+    "id": "assembler",
+    "name": "Assembler",
+    "description": "Assembles parts from multiple inputs",
+    "type": "Assembler",
+    "productionSpeed": 1.0,
+    "powerConsumption": 15.0,
+    "maxInputConnections": 2,
+    "maxOutputConnections": 1,
+    "canOverclock": true
+  },
+  {
+    "id": "manufacturer",
+    "name": "Manufacturer",
+    "description": "Manufactures complex parts from multiple inputs",
+    "type": "Manufacturer",
+    "productionSpeed": 1.0,
+    "powerConsumption": 55.0,
+    "maxInputConnections": 4,
+    "maxOutputConnections": 1,
+    "canOverclock": true
+  },
+  {
+    "id": "refinery",
+    "name": "Refinery",
+    "description": "Refines liquids and gases",
+    "type": "Refinery",
+    "productionSpeed": 1.0,
+    "powerConsumption": 30.0,
+    "maxInputConnections": 3,
+    "maxOutputConnections": 2,
+    "canOverclock": true
+  },
+  {
+    "id": "miner_mk1",
+    "name": "Miner Mk.1",
+    "description": "Extracts solid resources from resource nodes",
+    "type": "Extractor",
+    "productionSpeed": 1.0,
+    "powerConsumption": 5.0,
+    "maxInputConnections": 0,
+    "maxOutputConnections": 1,
+    "canOverclock": true
+  },
+  {
+    "id": "miner_mk2",
+    "name": "Miner Mk.2",
+    "description": "Faster extraction of solid resources",
+    "type": "Extractor",
+    "productionSpeed": 2.0,
+    "powerConsumption": 12.0,
+    "maxInputConnections": 0,
+    "maxOutputConnections": 1,
+    "canOverclock": true
+  },
+  {
+    "id": "miner_mk3",
+    "name": "Miner Mk.3",
+    "description": "Fastest extraction of solid resources",
+    "type": "Extractor",
+    "productionSpeed": 4.0,
+    "powerConsumption": 30.0,
+    "maxInputConnections": 0,
+    "maxOutputConnections": 1,
+    "canOverclock": true
+  },
+  {
+    "id": "equipment_workshop",
+    "name": "Equipment Workshop",
+    "description": "Building for crafting equipment and tools",
+    "type": "Workshop",
+    "productionSpeed": 1.0,
+    "powerConsumption": 0.0,
+    "maxInputConnections": 0,
+    "maxOutputConnections": 0,
+    "canOverclock": false
+  }
+]

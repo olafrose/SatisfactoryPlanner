@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SatisfactoryPlanner.Core.Services;
+using SatisfactoryPlanner.GameData.Models;
 
 namespace SatisfactoryPlanner.Core.Models;
 
@@ -96,8 +97,18 @@ public class PlayerResearchState
     }
 
     /// <summary>
-    /// Checks if a machine/building is available to the player
+    /// Checks if a building is available to the player
     /// </summary>
+    public bool IsBuildingAvailable(Building building)
+    {
+        // Check if the building is unlocked by any completed milestone
+        return IsMachineUnlockedByMilestones(building.Id);
+    }
+
+    /// <summary>
+    /// Checks if a machine/building is available to the player (obsolete - use IsBuildingAvailable)
+    /// </summary>
+    [Obsolete("Use IsBuildingAvailable instead of IsMachineAvailable to align with wiki terminology")]
     public bool IsMachineAvailable(Machine machine)
     {
         // Check if the machine is unlocked by any completed milestone
@@ -122,8 +133,18 @@ public class PlayerResearchState
     }
 
     /// <summary>
-    /// Checks if a machine is available using milestone repository (async version)
+    /// Checks if a building is available using milestone repository (async version)
     /// </summary>
+    public async Task<bool> IsBuildingAvailableAsync(Building building, IMilestoneRepository milestoneRepository)
+    {
+        // Check if the building is unlocked by any completed milestone
+        return await IsMachineUnlockedByMilestonesAsync(building.Id, milestoneRepository);
+    }
+
+    /// <summary>
+    /// Checks if a machine is available using milestone repository (async version) (obsolete - use IsBuildingAvailableAsync)
+    /// </summary>
+    [Obsolete("Use IsBuildingAvailableAsync instead of IsMachineAvailableAsync to align with wiki terminology")]
     public async Task<bool> IsMachineAvailableAsync(Machine machine, IMilestoneRepository milestoneRepository)
     {
         // Check if the machine is unlocked by any completed milestone

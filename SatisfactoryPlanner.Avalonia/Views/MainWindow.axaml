@@ -19,16 +19,78 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
+        <!-- Menu Bar -->
+        <Menu Grid.Row="0">
+            <MenuItem Header="Debug">
+                <MenuItem Header="Toggle Debug Console" Click="ToggleDebug_Click"/>
+            </MenuItem>
+        </Menu>
+
         <!-- Top Milestone Panel -->
-        <views:MilestoneManagerView Grid.Row="0"
+        <views:MilestoneManagerView Grid.Row="1"
                                    DataContext="{Binding MilestoneManager}"/>
 
         <!-- Main Content Area -->
-        <views:ProductionPlannerView Grid.Row="1"
+        <views:ProductionPlannerView Grid.Row="2"
                                     DataContext="{Binding ProductionPlanner}"/>
+
+        <!-- Debug Panel -->
+        <Border Grid.Row="3" 
+                Background="LightYellow" 
+                BorderBrush="Gray" 
+                BorderThickness="1,1,1,0"
+                IsVisible="{Binding IsDebugPanelVisible}"
+                MinHeight="0"
+                MaxHeight="200">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                
+                <Border Grid.Row="0" 
+                        Background="DarkGray" 
+                        Padding="8,4">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Debug Console" 
+                                   FontWeight="Bold" 
+                                   Foreground="White"
+                                   VerticalAlignment="Center"/>
+                        <Button Content="Clear" 
+                                Margin="10,0,0,0"
+                                Click="ClearDebug_Click"/>
+                        <Button x:Name="ToggleButton"
+                                Content="Hide" 
+                                Margin="5,0,0,0"
+                                Click="ToggleDebug_Click"/>
+                    </StackPanel>
+                </Border>
+                
+                <ScrollViewer Grid.Row="1" 
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Auto">
+                    <TextBox Text="{Binding Debug.DebugText}" 
+                             IsReadOnly="True"
+                             TextWrapping="Wrap"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             FontFamily="Consolas"
+                             FontSize="11"/>
+                </ScrollViewer>
+            </Grid>
+        </Border>
     </Grid>
+
+    <Window.Styles>
+        <Style Selector="Border[IsVisible=False]">
+            <Setter Property="Height" Value="0"/>
+            <Setter Property="MinHeight" Value="0"/>
+        </Style>
+    </Window.Styles>
 
 </Window>

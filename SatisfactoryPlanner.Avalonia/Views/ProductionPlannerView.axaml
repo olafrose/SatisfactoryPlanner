@@ -1,6 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:SatisfactoryPlanner.Avalonia.ViewModels"
+             xmlns:ap="using:SatisfactoryPlanner.Avalonia.AttachedProperties"
              x:Class="SatisfactoryPlanner.Avalonia.Views.ProductionPlannerView"
              x:DataType="vm:ProductionPlannerViewModel">
 
@@ -35,21 +36,89 @@
         </Border>
         
         <!-- Production Flow Graph -->
-        <ScrollViewer Grid.Row="1"
-                      Name="ProductionGraphScrollViewer"
-                      AllowAutoHide="False">
-          
-          <Border Background="LightGray" 
-                  MinWidth="1000" 
-                  MinHeight="600">
-            <!-- This will be populated programmatically with production nodes -->
-            <TextBlock Text="Production Flow Graph - Nodes will appear here"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       FontSize="14"
-                       Foreground="Gray"/>
-          </Border>
-        </ScrollViewer>
+        <Grid Grid.Row="1">
+          <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <Grid Margin="20">
+              
+              <!-- Connection Lines (behind nodes) -->
+              <ItemsControl ItemsSource="{Binding ConnectionLines}">
+                <ItemsControl.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <Canvas Background="#FAFAFA" MinWidth="800" MinHeight="600"/>
+                  </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                    <Path Stroke="#1976D2" 
+                          StrokeThickness="2" 
+                          Data="{Binding PathData}"
+                          StrokeLineCap="Round"
+                          IsHitTestVisible="False">
+                      <Path.Effect>
+                        <DropShadowEffect Color="#40000000" BlurRadius="2" OffsetX="1" OffsetY="1"/>
+                      </Path.Effect>
+                    </Path>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+              
+              <!-- Production Nodes (on top of lines) -->
+              <ItemsControl ItemsSource="{Binding ProductionNodes}">
+                <ItemsControl.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <Canvas Background="Transparent" MinWidth="800" MinHeight="600"/>
+                  </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+              
+              <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                  <Border Background="#E3F2FD"
+                          BorderBrush="#1976D2"
+                          BorderThickness="2"
+                          CornerRadius="8"
+                          Padding="12"
+                          MinWidth="160"
+                          BoxShadow="0 2 8 0 #20000000"
+                          Name="ProductionNodeBorder"
+                          ap:DragHelper.IsDraggable="True">
+                    <Border.RenderTransform>
+                      <TranslateTransform X="{Binding XPosition}" Y="{Binding YPosition}"/>
+                    </Border.RenderTransform>
+                    
+                    <StackPanel IsHitTestVisible="False">
+                      <TextBlock Text="{Binding Name}"
+                                 FontWeight="Bold"
+                                 FontSize="14"
+                                 HorizontalAlignment="Center"
+                                 Foreground="#1565C0"
+                                 IsHitTestVisible="False"/>
+                      <TextBlock Text="{Binding BuildingName}"
+                                 FontSize="12"
+                                 HorizontalAlignment="Center"
+                                 Margin="0,4,0,0"
+                                 Foreground="#424242"
+                                 IsHitTestVisible="False"/>
+                      <TextBlock FontSize="11"
+                                 HorizontalAlignment="Center"
+                                 Margin="0,2,0,0"
+                                 Foreground="#666666"
+                                 IsHitTestVisible="False">
+                        <TextBlock.Text>
+                          <MultiBinding StringFormat="{}{0:F1}x {1:F1}/min">
+                            <Binding Path="BuildingCount"/>
+                            <Binding Path="ProductionRate"/>
+                          </MultiBinding>
+                        </TextBlock.Text>
+                      </TextBlock>
+                    </StackPanel>
+                  </Border>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+              </ItemsControl>
+              
+            </Grid>
+          </ScrollViewer>
+        </Grid>
       </Grid>
     </Border>
 
@@ -121,34 +190,62 @@
                       <RowDefinition Height="Auto"/>
                       <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
                     
-                    <!-- Product selection -->
-                    <ComboBox Grid.Row="0"
-                              Margin="0,0,0,8"
-                              HorizontalAlignment="Stretch">
-                      <ComboBoxItem Content="{Binding DisplayName}"/>
-                    </ComboBox>
+                    <!-- Main content -->
+                    <StackPanel Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
+                      
+                      <!-- Product selection -->
+                      <ComboBox SelectedItem="{Binding TargetItem}"
+                                ItemsSource="{Binding $parent[UserControl].DataContext.AvailableItems}"
+                                Margin="0,0,0,8"
+                                HorizontalAlignment="Stretch">
+                        <ComboBox.ItemTemplate>
+                          <DataTemplate>
+                            <TextBlock Text="{Binding Name}"/>
+                          </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                      </ComboBox>
+                      
+                      <!-- Rate input -->
+                      <Grid>
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="*"/>
+                          <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <NumericUpDown Grid.Column="0"
+                                       Value="{Binding TargetRate}"
+                                       Minimum="0"
+                                       Maximum="9999"
+                                       Increment="10"
+                                       FormatString="F1"/>
+                        
+                        <TextBlock Grid.Column="1"
+                                   Text="/min"
+                                   VerticalAlignment="Center"
+                                   Margin="8,0,0,0"
+                                   Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+                      </Grid>
+                    </StackPanel>
                     
-                    <!-- Rate input -->
-                    <Grid Grid.Row="1">
-                      <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                      </Grid.ColumnDefinitions>
-                      
-                      <NumericUpDown Grid.Column="0"
-                                     Value="{Binding TargetRate}"
-                                     Minimum="0"
-                                     Maximum="9999"
-                                     Increment="10"
-                                     FormatString="F1"/>
-                      
-                      <TextBlock Grid.Column="1"
-                                 Text="/min"
-                                 VerticalAlignment="Center"
-                                 Margin="8,0,0,0"
-                                 Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
-                    </Grid>
+                    <!-- Remove button -->
+                    <Button Grid.Row="0" Grid.Column="1"
+                            Command="{Binding RemoveCommand}"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Padding="8"
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Right"
+                            ToolTip.Tip="Remove target">
+                      <Path Data="M6 6L18 18M6 18L18 6"
+                            Stroke="Red"
+                            StrokeThickness="2"
+                            Width="12" Height="12"/>
+                    </Button>
                   </Grid>
                 </Border>
               </DataTemplate>
@@ -161,12 +258,39 @@
                 BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
                 BorderThickness="0,1,0,0"
                 Padding="16">
-          <Button Content="+ Add Production Target"
-                  HorizontalAlignment="Stretch"
-                  HorizontalContentAlignment="Center"
-                  Padding="12"/>
+          <StackPanel Spacing="8">
+            <Button Content="+ Add Production Target"
+                    Command="{Binding AddProductionTargetCommand}"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    Padding="12"/>
+                  
+            <!-- Status display -->
+            <TextBlock Text="{Binding CalculationStatus}"
+                       HorizontalAlignment="Center"
+                       FontSize="12"
+                       Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                       TextWrapping="Wrap"/>
+          </StackPanel>
         </Border>
+
       </Grid>
     </Border>
   </Grid>
+
+  <UserControl.Styles>
+    <!-- Hover effects for draggable production nodes -->
+    <Style Selector="Border[Name=ProductionNodeBorder]:pointerover">
+      <Setter Property="BorderBrush" Value="#0D47A1"/>
+      <Setter Property="BoxShadow" Value="0 4 12 0 #30000000"/>
+      <Setter Property="Cursor" Value="Hand"/>
+    </Style>
+    
+    <!-- Active drag state -->
+    <Style Selector="Border[Name=ProductionNodeBorder]:pressed">
+      <Setter Property="BorderBrush" Value="#1976D2"/>
+      <Setter Property="BoxShadow" Value="0 6 16 0 #40000000"/>
+      <Setter Property="Background" Value="#E8F4FD"/>
+    </Style>
+  </UserControl.Styles>
 </UserControl>

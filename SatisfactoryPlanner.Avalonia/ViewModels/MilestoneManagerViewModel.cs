@@ -61,6 +61,12 @@ public partial class MilestoneItemViewModel : ViewModelBase
     [ObservableProperty]
     private string _description = string.Empty;
 
+    [ObservableProperty]
+    private string _milestoneId = string.Empty;
+
+    [ObservableProperty]
+    private bool _isRequired = true;
+
     partial void OnMilestoneChanged(Milestone? value)
     {
         if (value != null)

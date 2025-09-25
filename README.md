@@ -1,23 +1,26 @@
 # Satisfactory Planner
 
-A production planning tool for the PC game Satisfactory. Currently in early development with backend infrastructure complete and GUI in progress.
+A comprehensive production planning tool for the PC game Satisfactory, featuring an interactive visual interface for complex factory planning.
 
-## Current Status
+## Current Status - v0.5 Alpha ✨
 
-This project implements the core data structures and algorithms for Satisfactory production planning. The console application is primarily used for testing and demonstrating the backend functionality.
+**Major Milestone: Visual Production Planner Complete!**
 
-**What works:**
-- Game data loading (400+ items, 300+ recipes, 50+ buildings, 50+ milestones)
-- Basic production graph calculation
-- Recipe and building repository system
-- Icon loading system (local files, not in repository)
-- Machine → Building terminology migration (backward compatible)
+**✅ What works:**
+- **Interactive Visual Interface** - Full Avalonia UI with MVVM architecture
+- **Flow Graph Visualization** - Drag-and-drop production nodes with dynamic connection lines
+- **Multi-Target Production Planning** - Handle multiple production chains simultaneously
+- **Real-time Calculations** - Live updates of building counts and production rates
+- **Complete Game Data Integration** - 400+ items, 300+ recipes, 50+ buildings, 50+ milestones
+- **Milestone Management** - Research progression tracking and unlock status
+- **Advanced Production Algorithms** - Dependency resolution and resource optimization
+- **Clean Modern UI** - Professional interface with debugging console (toggle-able)
 
-**What doesn't work yet:**
-- No GUI (Avalonia UI planned)
-- No save/load functionality
-- No optimization algorithms
-- Limited production planning features
+**🚧 In Development:**
+- Visual icons for buildings and items
+- Output item nodes for clearer multi-target visualization
+- Enhanced production chain analysis
+- Save/load functionality for production plans
 
 ## Project Structure
 
@@ -56,13 +59,27 @@ dotnet build
 dotnet restore
 ```
 
-### Running the Console App
+### Running the Visual Planner (Primary Application)
+
+```powershell
+# Run the main Avalonia UI application
+dotnet run --project SatisfactoryPlanner.Avalonia
+```
+
+**Features Available:**
+- **Production Planning**: Add production targets and see the complete production chain
+- **Visual Flow Graph**: Drag nodes around to arrange your factory layout
+- **Milestone Manager**: Track research progression and building unlocks
+- **Real-time Updates**: Connection lines follow nodes as you move them
+- **Multi-chain Support**: Plan multiple production targets simultaneously
+
+### Running the Console App (Development Tool)
 
 ```powershell
 dotnet run --project SatisfactoryPlanner.App
 ```
 
-The console app demonstrates basic functionality like loading game data and showing available items/buildings. It's primarily a development tool for testing the backend.
+The console app demonstrates backend functionality and is primarily used for testing core algorithms.
 
 ### 🧪 Running Tests
 
@@ -81,27 +98,38 @@ dotnet test SatisfactoryPlanner.Tests
 
 This project is in early development. The console application currently just loads game data and displays some basic information to verify the backend is working correctly.
 
-### Completed
-- Game data loading system
-- Basic repository pattern for items, recipes, buildings, milestones
-- Icon system (files kept local via .gitignore)
-- Machine → Building terminology migration with backward compatibility
-- Unit tests for core functionality
+### ✅ Recently Completed (December 2024)
+- **Full Avalonia UI Implementation** - Modern cross-platform interface
+- **Interactive Production Flow Graphs** - Visual drag-and-drop node system
+- **Dynamic Connection Lines** - Real-time updates as nodes are moved
+- **Multi-target Production Chains** - Support for complex factory planning
+- **Advanced Production Algorithms** - Dependency resolution and flow optimization
+- **Milestone Integration** - Research progression affects available recipes
+- **MVVM Architecture** - Clean separation of concerns with data binding
+- **Comprehensive Debug System** - Toggle-able debug console for development
 
-### TODO
-- Avalonia UI implementation
-- Actual production planning algorithms
-- Save/load functionality
-- Recipe optimization
-- User interface design
+### 🎯 Next Priorities
+- **Visual Icons** - Building and item icons for enhanced clarity
+- **Output Item Nodes** - Dedicated nodes for final products
+- **Enhanced UI Polish** - Improved styling and user experience
+- **Save/Load System** - Persist production plans between sessions
+- **Factory Layout Tools** - Spatial planning and optimization features
 ## Architecture
 
-The project follows a layered architecture:
+The project follows a clean layered architecture with MVVM pattern:
 
-- **GameData** layer handles JSON loading and game data models
-- **Core** layer contains domain logic and repository interfaces  
-- **App** layer is a simple console application for testing
-- **Tests** verify the core functionality works
+- **SatisfactoryPlanner.Avalonia** - Main UI application with interactive visual planning
+- **SatisfactoryPlanner.GameData** - JSON loading, game data models, and repositories
+- **SatisfactoryPlanner.Core** - Domain logic, production algorithms, and business rules
+- **SatisfactoryPlanner.App** - Console application for testing and debugging
+- **SatisfactoryPlanner.Tests** - Comprehensive unit test coverage
+
+### Key Components
+- **ViewModels** - MVVM data binding with CommunityToolkit.Mvvm
+- **Production Graph Builder** - Advanced dependency resolution algorithms
+- **Flow Graph Positioning** - Automatic layout of production chains
+- **Dynamic Connection System** - Real-time visual connections between nodes
+- **Milestone System** - Research progression and recipe unlocking
 
 ## Game Data
 

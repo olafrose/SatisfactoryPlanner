@@ -105,10 +105,10 @@ public class ProductionGraphBuilder
         ProductionGraphOptions options,
         ProductionGraph graph)
     {
-        // If it's a raw resource, no production node needed
+        // If it's a raw resource, create a miner/extractor node
         if (targetOutput.Item.IsRawResource)
         {
-            return null;
+            return await CreateMinerNodeAsync(targetOutput, gameTier, options, graph);
         }
 
         // Find the best recipe for this item
@@ -182,10 +182,10 @@ public class ProductionGraphBuilder
         ProductionGraphOptions options,
         ProductionGraph graph)
     {
-        // If it's a raw resource, no production node needed
+        // If it's a raw resource, create a miner/extractor node
         if (targetOutput.Item.IsRawResource)
         {
-            return null;
+            return await CreateMinerNodeAsync(targetOutput, playerState.CurrentTier, options, graph);
         }
 
         // Find the best recipe for this item
@@ -247,6 +247,53 @@ public class ProductionGraphBuilder
         }
 
         return node;
+    }
+
+    /// <summary>
+    /// Creates a miner/extractor node for raw resources
+    /// </summary>
+    private async Task<ProductionNode> CreateMinerNodeAsync(
+        ItemQuantity targetOutput,
+        int gameTier,
+        ProductionGraphOptions options,
+        ProductionGraph graph)
+    {
+        // Find extractor buildings for this raw resource
+        var availableBuildings = await _buildingRepository.GetAllBuildingsAsync();
+        var extractorBuildings = availableBuildings
+            .Where(b => b.Type == BuildingType.Extractor)
+            .ToList();
+
+        if (!extractorBuildings.Any())
+        {
+            throw new InvalidOperationException($"No extractor buildings available for {targetOutput.Item.Name}");
+        }
+
+        var selectedBuilding = SelectBestBuilding(extractorBuildings, options);
+
+        // Create a simple extraction "recipe"
+        var extractionNode = new ProductionNode
+        {
+            Recipe = new Recipe 
+            { 
+                Id = $"extract_{targetOutput.Item.Id}",
+                Name = $"Extract {targetOutput.Item.Name}",
+                Outputs = new List<ItemQuantity> 
+                { 
+                    new ItemQuantity { Item = targetOutput.Item, Quantity = 60.0, QuantityPerMinute = 60.0 }
+                },
+                Inputs = new List<ItemQuantity>(), // No inputs for raw extraction
+                ProductionTimeSeconds = 60 // Assume 1 minute cycle
+            },
+            Building = selectedBuilding,
+            TargetProductionRate = targetOutput.QuantityPerMinute
+        };
+
+        // Calculate required extractor count (assume 60 items/min base rate for miners)
+        var baseExtractionRate = 60.0; // Default extraction rate for miners
+        extractionNode.BuildingCount = Math.Ceiling(targetOutput.QuantityPerMinute / baseExtractionRate);
+
+        return extractionNode;
     }
 
     /// <summary>

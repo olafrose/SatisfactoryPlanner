@@ -1,103 +1,134 @@
-# 📝 Satisfactory Planner - Machine → Building Migration TODO
+# 📝 Satisfactory Planner - Current Development Tasks
 
-## 🎯 Current Status Summary
-**✅ MAJOR MIGRATION COMPLETE** - Core functionality successfully migrated from Machine → Building terminology!
-- **Build Status**: ✅ Successful (only helpful obsolete warnings)
-- **Tests**: ✅ All 4 tests passing
-- **Application**: ✅ Runs perfectly with Building terminology
-- **Functionality**: ✅ 100% preserved - zero breaking changes
-
----
-
-## 🔄 Phase 5: Final Cleanup Tasks (Tomorrow)
-
-### **High Priority - Code Quality**
-
-#### 1. **Remove Remaining Obsolete Usage** 🧹
-- [ ] **GameDataService.cs**
-  - Remove `_machineLoader` field dependency 
-  - Remove `new MachineLoader()` instantiation
-  - Update to use only `_buildingLoader`
-
-- [ ] **BuildingLoader.cs**
-  - Implement native Building loading (instead of delegating to MachineLoader)
-  - Remove dependency on obsolete MachineLoader
-  - Create direct DTO → Building conversion
-
-#### 2. **Update Demo/Example Code** 📚
-- [ ] **IconDemo.cs**
-  - Replace `LoadMachinesAsync()` → `LoadBuildingsAsync()`
-  - Replace Machine variables → Building variables
-  - Update icon extension method calls to use Building overloads
-
-#### 3. **Text and Comments Update** ✏️
-- [ ] **Comments and Documentation**
-  - Update XML documentation comments that still reference "machine"
-  - Update console output text from "machines" → "buildings"
-  - Update variable names in comments (machineLoader → buildingLoader)
-
-- [ ] **SatisfactoryPlannerService.cs**
-  - Line 236: Update suggestion text "Some machines are underclocked" → "Some buildings are underclocked"
-
-- [ ] **PlayerResearchState.cs** 
-  - Update method documentation comments to use Building terminology
-  - Update internal comments that reference machines
+## 🎯 Current Status Summary - v0.5 Alpha
+**🎉 MAJOR MILESTONE ACHIEVED** - Full visual production planner is complete and working!
+- **Visual Interface**: ✅ Complete Avalonia UI with drag-and-drop functionality
+- **Production Planning**: ✅ Multi-target support with flow graph visualization
+- **Real-time Updates**: ✅ Dynamic connection lines and live calculations
+- **Architecture**: ✅ Clean MVVM pattern with comprehensive data binding
+- **User Experience**: ✅ Professional interface with debug console
 
 ---
 
-### **Medium Priority - Architecture Improvements**
+## 🎨 Phase 6: Visual Enhancement Tasks (Next Sprint)
 
-#### 4. **Repository Pattern Completion** 🏗️
-- [ ] **Remove IMachineRepository Usage**
-  - Find any remaining dependencies on obsolete IMachineRepository
-  - Ensure all services use IBuildingRepository exclusively
+### **High Priority - Visual Features**
 
-#### 5. **Data Transfer Objects** 📦
-- [ ] **Consider BuildingDto Creation**
-  - Evaluate if MachineDto should be renamed to BuildingDto
-  - Assess impact on JSON data compatibility
-  - Plan migration strategy if needed
+#### 1. **Building & Item Icons Integration** 🎨
+- [ ] **ProductionNodeViewModel Enhancement**
+  - Add BuildingIcon property for visual display
+  - Integrate with existing IconService
+  - Add fallback icons for missing assets
+  - Cache icons for performance
 
----
+- [ ] **Connection Line Item Icons**
+  - Display item icons on connection lines
+  - Show production rates and item names
+  - Add hover tooltips with detailed information
+  - Implement icon positioning along lines
 
-### **Low Priority - Polish & Future-Proofing**
+#### 2. **Output Item Nodes** �
+- [ ] **Create OutputItemNodeViewModel**
+  - New node type for final production targets
+  - Display target item icon and required quantity
+  - Position at the end of production chains
+  - Make multi-target graphs visually distinct
 
-#### 6. **Complete Obsolete Removal Plan** 🗑️
-- [ ] **Create Obsolete Removal Timeline**
-  - Plan when to remove obsolete Machine classes (suggest v2.0)
-  - Plan when to remove obsolete methods
-  - Document breaking change migration guide
+- [ ] **Update Flow Graph Layout**
+  - Modify CalculateFlowGraphPositions to include output nodes
+  - Extend connection lines to reach output nodes
+  - Adjust spacing for better visual hierarchy
 
-#### 7. **Testing Enhancements** 🧪
-- [ ] **Add Building-Specific Tests**
-  - Create tests that specifically use new Building terminology
-  - Add tests for Building-specific functionality
-  - Verify all Building extension methods work correctly
+#### 3. **UI Polish & User Experience** ✨
+- [ ] **Node Styling Improvements**
+  - Enhanced visual design with better colors and shadows
+  - Hover effects and selection states
+  - Building type color coding (miners, smelters, constructors, etc.)
+  - Better typography and layout within nodes
 
-#### 8. **UI/UX Consistency** 🎨
-- [ ] **Avalonia UI Updates** (if applicable)
-  - Check if UI displays still show "Machine" terminology
-  - Update any hardcoded strings in UI
-  - Ensure consistent Building terminology in user-facing text
-
----
-
-## 🚀 Future Enhancement Opportunities
-
-#### **Phase 6: Advanced Features** (Future)
-- [ ] **Enhanced Building Types**
-  - Implement more granular BuildingType categories
-  - Add Building-specific properties (footprint, complexity, etc.)
-  - Support for Building upgrade paths
-
-- [ ] **Wiki Integration**
-  - Validate Building names match official Satisfactory wiki exactly
-  - Add Building description sync with wiki
-  - Implement Building icon auto-update from wiki
+- [ ] **Interaction Enhancements**
+  - Grid snap for precise positioning
+  - Multi-select and group operations
+  - Context menus for node operations
+  - Keyboard shortcuts for common actions
 
 ---
 
-## 📋 Daily Checklist Template
+### **Medium Priority - Data & Persistence**
+
+#### 4. **Save/Load System Implementation** 💾
+- [ ] **Production Plan Serialization**
+  - Serialize complete production graphs with node positions
+  - Include user customizations (node positions, layout preferences)
+  - Version compatibility and migration handling
+  - Auto-save functionality for crash recovery
+
+#### 5. **User Preferences** ⚙️
+- [ ] **Settings System**
+  - Window size and position persistence
+  - Panel visibility preferences (debug console, etc.)
+  - Default production targets and common configurations
+  - Theme and appearance customization
+
+---
+
+### **Low Priority - Advanced Features**
+
+#### 6. **Production Analysis Tools** �
+- [ ] **Bottleneck Detection**
+  - Identify limiting factors in production chains
+  - Visual indicators for underutilized buildings
+  - Optimization suggestions and recommendations
+  - Alternative recipe path analysis
+
+#### 7. **Factory Layout Tools** 🏗️
+- [ ] **Spatial Planning Features**
+  - Grid snap and alignment tools
+  - Building footprint visualization
+  - Foundation planning helpers
+  - Belt/pipe routing suggestions
+
+#### 8. **Advanced Calculations** 🧮
+- [ ] **Power Consumption Analysis**
+  - Total power requirements for production chains
+  - Power generation planning and optimization
+  - Overclocking vs. building count analysis
+  - Resource efficiency metrics and sustainability planning
+
+---
+
+## 🚀 Future Enhancement Vision
+
+#### **Phase 7: Community & Sharing** (Future)
+- [ ] **Plan Sharing System**
+  - Export production plans as shareable files
+  - Community repository for common production setups
+  - Template gallery for popular factory configurations
+  - Integration with Satisfactory community tools
+
+- [ ] **Game Integration**
+  - Validate data against latest game updates
+  - Auto-update system for new game content
+  - Integration with game save files (read-only analysis)
+  - Export to game-compatible formats
+
+---
+
+## 📋 Current Sprint Focus
+
+### ✅ **Completed This Week:**
+- Interactive drag-and-drop production flow graphs
+- Real-time connection lines that follow node movement
+- Multi-target production chain support with proper separation
+- Professional MVVM architecture with comprehensive data binding
+- Debug console with toggle functionality
+- Clean UI with proper flow-based node positioning
+
+### 🎯 **Next Week Goals:**
+- Integrate building and item icons into the visual interface
+- Add dedicated output item nodes for clearer multi-target visualization
+- Enhance UI styling and user experience polish
+- Implement basic save/load functionality for production plans
 
 ### **Tomorrow's Session Start:**
 1. ✅ Run `dotnet build` - verify still successful
